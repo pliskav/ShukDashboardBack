@@ -1,4 +1,4 @@
-package dto;
+package shuk.dto;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,8 +1,8 @@
-package service;
+package shuk.service;
 
 import java.util.Map;
 
-import dto.OrderResponseDTO;
+import shuk.dto.OrderResponseDTO;
 
 public interface IOrders {
 	

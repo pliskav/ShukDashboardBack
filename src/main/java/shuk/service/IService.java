@@ -1,8 +1,8 @@
-package service;
+package shuk.service;
 
 import java.util.List;
 
-import dao.UserSql;
+import shuk.dao.UserSql;
 
 public interface IService {
 	

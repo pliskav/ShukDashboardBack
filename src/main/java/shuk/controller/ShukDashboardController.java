@@ -1,4 +1,4 @@
-package controller;
+package shuk.controller;
 
 import java.util.Map;
 
@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dto.OrderResponseDTO;
-import service.IOrders;
-import service.IService;
-import service.ItemRepository;
-import service.OrderItemRepository;
-import service.OrderRepositorySql;
-import service.UserRepositorySql;
+import shuk.dto.OrderResponseDTO;
+import shuk.service.IOrders;
+import shuk.service.IService;
+import shuk.service.ItemRepository;
+import shuk.service.OrderItemRepository;
+import shuk.service.OrderRepositorySql;
+import shuk.service.UserRepositorySql;
 
 @CrossOrigin
 @RestController

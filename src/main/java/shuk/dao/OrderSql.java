@@ -1,4 +1,4 @@
-package dao;
+package shuk.dao;
 
 import java.sql.Date;
 

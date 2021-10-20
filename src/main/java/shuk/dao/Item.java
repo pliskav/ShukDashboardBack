@@ -1,4 +1,4 @@
-package dao;
+package shuk.dao;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

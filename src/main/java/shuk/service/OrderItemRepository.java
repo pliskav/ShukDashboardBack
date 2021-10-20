@@ -1,11 +1,11 @@
-package service;
+package shuk.service;
 
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import dao.OrderItem;
+import shuk.dao.OrderItem;
 
 @Repository
 public interface OrderItemRepository extends CrudRepository<OrderItem, Integer> {

@@ -1,4 +1,4 @@
-package service;
+package shuk.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,12 +12,12 @@ import javax.persistence.Persistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dao.UserSql;
-import dto.OrderBaseResponseDTO;
-import dto.OrderDTO;
-import dto.OrderItemDto;
-import dto.OrderResponseDTO;
-import dto.UserOrderDTO;
+import shuk.dao.UserSql;
+import shuk.dto.OrderBaseResponseDTO;
+import shuk.dto.OrderDTO;
+import shuk.dto.OrderItemDto;
+import shuk.dto.OrderResponseDTO;
+import shuk.dto.UserOrderDTO;
 
 @Service
 public class IServiceImplementation implements IService, IOrders{

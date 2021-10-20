@@ -1,4 +1,4 @@
-package dto;
+package shuk.dto;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package dto;
+package shuk.dto;
 
 
 public class UserOrderDTO {
