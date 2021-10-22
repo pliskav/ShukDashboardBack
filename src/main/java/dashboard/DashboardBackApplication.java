@@ -1,13 +1,13 @@
-package shuk;
+package dashboard;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ShukDashboardBackApplication {
+public class DashboardBackApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ShukDashboardBackApplication.class, args);
+		SpringApplication.run(DashboardBackApplication.class, args);
 	}
 
 }

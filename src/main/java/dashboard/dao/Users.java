@@ -1,4 +1,4 @@
-package shuk.dao;
+package dashboard.dao;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class UserSql {
+public class Users {
 	@Id
 	int id;
 	String name;
@@ -120,7 +120,7 @@ public class UserSql {
 	public void setTax_number(String tax_number) {
 		this.tax_number = tax_number;
 	}
-	public UserSql(int id, String name, String email, String email_verified_at, String password, String remember_token,
+	public Users(int id, String name, String email, String email_verified_at, String password, String remember_token,
 			String created_at, String updated_at, String auth_token, String phone, String default_address_id,
 			String delivery_pin, String delivery_guy_detail_id, String avatar, String is_active, String tax_number) {
 		super();
@@ -141,7 +141,7 @@ public class UserSql {
 		this.is_active = is_active;
 		this.tax_number = tax_number;
 	}
-	public UserSql() {
+	public Users() {
 		super();
 	}
 	

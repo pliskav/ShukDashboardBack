@@ -1,4 +1,4 @@
-package shuk.dto;
+package dashboard.dto;
 
 public class OrderDTO {
 	

@@ -1,4 +1,4 @@
-package shuk.dto;
+package dashboard.dto;
 
 import lombok.Getter;
 import lombok.Setter;

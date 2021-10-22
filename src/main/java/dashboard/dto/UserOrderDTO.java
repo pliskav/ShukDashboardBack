@@ -1,4 +1,4 @@
-package shuk.dto;
+package dashboard.dto;
 
 
 public class UserOrderDTO {
@@ -10,7 +10,7 @@ public class UserOrderDTO {
     String delivery_pin;
     String delivery_guy_detail_id;
     String avatar;
-    int is_active;
+    String is_active;
     String tax_number;
     
 	public int getId() {
@@ -61,10 +61,10 @@ public class UserOrderDTO {
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
-	public int getIs_active() {
+	public String getIs_active() {
 		return is_active;
 	}
-	public void setIs_active(int is_active) {
+	public void setIs_active(String is_active) {
 		this.is_active = is_active;
 	}
 	public String getTax_number() {
@@ -74,7 +74,7 @@ public class UserOrderDTO {
 		this.tax_number = tax_number;
 	}
 	public UserOrderDTO(int id, String name, String email, String phone, String default_address_id, String delivery_pin,
-			String delivery_guy_detail_id, String avatar, int is_active, String tax_number) {
+			String delivery_guy_detail_id, String avatar, String is_active, String tax_number) {
 		super();
 		this.id = id;
 		this.name = name;

@@ -1,4 +1,4 @@
-package shuk.dao;
+package dashboard.dao;
 
 import java.sql.Date;
 
@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "orders")
-public class OrderSql {
+public class Orders {
 	
 	@Id
 	int id;
@@ -174,10 +174,10 @@ public class OrderSql {
 	public void setSub_total(String sub_total) {
 		this.sub_total = sub_total;
 	}
-	public OrderSql() {
+	public Orders() {
 		super();
 	}
-	public OrderSql(int id, String unique_order_id, int orderstatus_id, int user_id, String coupon_name, String address,
+	public Orders(int id, String unique_order_id, int orderstatus_id, int user_id, String coupon_name, String address,
 			String tax, String restaurant_charge, String delivery_charge, String total, Date created_at,
 			Date updated_at, String payment_mode, String order_comment, String restaurant_id, String transaction_id,
 			String delivery_type, String payable, String wallet_amount, String tip_amount, String tax_amount,

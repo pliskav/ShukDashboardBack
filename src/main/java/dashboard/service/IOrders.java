@@ -1,8 +1,8 @@
-package shuk.service;
+package dashboard.service;
 
 import java.util.Map;
 
-import shuk.dto.OrderResponseDTO;
+import dashboard.dto.OrderResponseDTO;
 
 public interface IOrders {
 	

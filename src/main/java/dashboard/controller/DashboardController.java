@@ -1,4 +1,4 @@
-package shuk.controller;
+package dashboard.controller;
 
 import java.util.Map;
 
@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import shuk.dto.OrderResponseDTO;
-import shuk.service.IOrders;
-import shuk.service.IService;
-import shuk.service.ItemRepository;
-import shuk.service.OrderItemRepository;
-import shuk.service.OrderRepositorySql;
-import shuk.service.UserRepositorySql;
+import dashboard.dto.OrderResponseDTO;
+import dashboard.service.IOrders;
+import dashboard.service.IService;
+import dashboard.service.ItemRepository;
+import dashboard.service.OrderItemRepository;
+import dashboard.service.OrderRepositorySql;
+import dashboard.service.UserRepositorySql;
 
 @CrossOrigin
 @RestController
 @RequestMapping()
-public class ShukDashboardController {
+public class DashboardController {
 	
 	@Autowired
 	OrderRepositorySql repositorySql;

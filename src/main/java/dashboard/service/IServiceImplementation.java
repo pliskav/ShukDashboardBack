@@ -1,28 +1,23 @@
-package shuk.service;
+package dashboard.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import shuk.dao.UserSql;
-import shuk.dto.OrderBaseResponseDTO;
-import shuk.dto.OrderDTO;
-import shuk.dto.OrderItemDto;
-import shuk.dto.OrderResponseDTO;
-import shuk.dto.UserOrderDTO;
+import dashboard.dao.Users;
+import dashboard.dto.OrderBaseResponseDTO;
+import dashboard.dto.OrderDTO;
+import dashboard.dto.OrderItemDto;
+import dashboard.dto.OrderResponseDTO;
+import dashboard.dto.UserOrderDTO;
 
 @Service
 public class IServiceImplementation implements IService, IOrders{
-	private static EntityManager em;
-    private static EntityManagerFactory emFactory;
+
 
 	@Autowired
 	UserRepositorySql userRepo;
@@ -34,10 +29,8 @@ public class IServiceImplementation implements IService, IOrders{
 	ItemRepository itemRepository;
 	
 	public Map<String, OrderResponseDTO> getAllOrders() {
-		emFactory = Persistence.createEntityManagerFactory("shuk_dashboard_back");
-        em = emFactory.createEntityManager();
-//        List<Long> employeeIds = em.createNamedQuery("FridayEmployees").getResultList();
-		List <OrderBaseResponseDTO> ordersJoinedResponseList = em.createNamedQuery("OrdersJoinedRequest", OrderBaseResponseDTO.class).getResultList();
+		
+		List <OrderBaseResponseDTO> ordersJoinedResponseList = orderRepo.findAllOrdersJoinUsers();
 		Map<String, OrderResponseDTO> map = new HashMap<>();
 		ordersJoinedResponseList.stream().forEach(res -> {
 			if(!map.containsKey(res.getUnique_order_id())) {
@@ -77,19 +70,19 @@ public class IServiceImplementation implements IService, IOrders{
 
 
 	@Override
-	public List<UserSql> findAllUsers() {
+	public List<Users> findAllUsers() {
 		return userRepo.findAll();
 	}
 
 	@Override
-	public UserSql findUserById(int Id) {
+	public Users findUserById(int Id) {
 		return userRepo.findById(Id);
 	}
 
 
 
 	@Override
-	public List<UserSql> findAllUsersById(Iterable<Integer> ids) {
+	public List<Users> findAllUsersById(Iterable<Integer> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
