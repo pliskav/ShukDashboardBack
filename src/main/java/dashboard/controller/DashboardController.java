@@ -1,7 +1,5 @@
 package dashboard.controller;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +34,7 @@ public class DashboardController {
 	
 	
 	@GetMapping("/")
-	public Map<String, OrderResponseDTO> getAllOrders() {
+	public Iterable<OrderResponseDTO> getAllOrders() {
 		return serviceOrders.getAllOrders();
 	}
 	

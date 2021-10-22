@@ -28,7 +28,7 @@ public class IServiceImplementation implements IService, IOrders{
 	@Autowired
 	ItemRepository itemRepository;
 	
-	public Map<String, OrderResponseDTO> getAllOrders() {
+	public Iterable<OrderResponseDTO> getAllOrders() {
 		
 		List <OrderBaseResponseDTO> ordersJoinedResponseList = orderRepo.findAllOrdersJoinUsers();
 		Map<String, OrderResponseDTO> map = new HashMap<>();
@@ -65,7 +65,7 @@ public class IServiceImplementation implements IService, IOrders{
 			}
 		});
 		
-		return map;
+		return map.values();
 	}
 
 
