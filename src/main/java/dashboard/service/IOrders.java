@@ -1,9 +1,9 @@
 package dashboard.service;
 
-import dashboard.dto.OrderResponseDTO;
+import dashboard.dto.PageDTO;
 
 public interface IOrders {
 	
-	public Iterable<OrderResponseDTO> getAllOrders();
+	public PageDTO getAllOrders();
 
 }

@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import dashboard.dao.Users;
@@ -13,6 +16,7 @@ import dashboard.dto.OrderBaseResponseDTO;
 import dashboard.dto.OrderDTO;
 import dashboard.dto.OrderItemDto;
 import dashboard.dto.OrderResponseDTO;
+import dashboard.dto.PageDTO;
 import dashboard.dto.UserOrderDTO;
 
 @Service
@@ -28,9 +32,12 @@ public class IServiceImplementation implements IService, IOrders{
 	@Autowired
 	ItemRepository itemRepository;
 	
-	public Iterable<OrderResponseDTO> getAllOrders() {
+	public PageDTO getAllOrders() {
 		
-		List <OrderBaseResponseDTO> ordersJoinedResponseList = orderRepo.findAllOrdersJoinUsers();
+		Pageable pageable = PageRequest.of(0, 10);
+		
+		Page<OrderBaseResponseDTO> pageRespons = orderRepo.findAllOrdersJoinUsers(pageable);
+		List <OrderBaseResponseDTO> ordersJoinedResponseList = pageRespons.getContent(); 
 		Map<String, OrderResponseDTO> map = new HashMap<>();
 		ordersJoinedResponseList.stream().forEach(res -> {
 			if(!map.containsKey(res.getUnique_order_id())) {
@@ -65,7 +72,7 @@ public class IServiceImplementation implements IService, IOrders{
 			}
 		});
 		
-		return map.values();
+		return new PageDTO(0, 12, map.values());
 	}
 
 
