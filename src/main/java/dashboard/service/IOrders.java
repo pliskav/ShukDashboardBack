@@ -1,10 +1,13 @@
 package dashboard.service;
 
-import dashboard.dto.OrderResponseDTO;
+import dashboard.dto.PageDTO;
 
 public interface IOrders {
 	
-	public Iterable<OrderResponseDTO> getAllOrders();
+
 	public void sendWhatsapp(String orderId);
+
+	public PageDTO getAllOrders();
+
 
 }

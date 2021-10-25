@@ -1,6 +1,7 @@
 package dashboard.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dashboard.dto.OrderResponseDTO;
+import dashboard.dto.PageDTO;
 import dashboard.service.IOrders;
 import dashboard.service.IService;
 import dashboard.service.ItemRepository;
@@ -36,7 +38,7 @@ public class DashboardController {
 	
 	
 	@GetMapping("/")
-	public Iterable<OrderResponseDTO> getAllOrders() {
+	public PageDTO getAllOrders() {
 		return serviceOrders.getAllOrders();
 	}
 	
