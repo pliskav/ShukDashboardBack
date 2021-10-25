@@ -3,6 +3,8 @@ package dashboard.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +38,13 @@ public class DashboardController {
 	@GetMapping("/")
 	public Iterable<OrderResponseDTO> getAllOrders() {
 		return serviceOrders.getAllOrders();
+	}
+	
+	@PostMapping("/send-whatsapp")
+	public Boolean sendWhatsapp(@RequestBody String orderId) {
+		 serviceOrders.sendWhatsapp(orderId);
+		 return true;
+		 
 	}
 	
 //	@GetMapping("/items")
