@@ -1,5 +1,6 @@
 package dashboard.dao;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -13,9 +14,11 @@ import lombok.Setter;
 @Setter
 public class Item {
 	@Id
-	int id; 
-	int restaurant_id; 
-	int item_category_id; 
+	int id;
+	@Column(name = "restaurant_id")
+	int restaurantId;
+	@Column(name = "item_category_id")
+	int itemCategoryId; 
 	String name;
 	float price;
 	float old_price; 
@@ -35,8 +38,8 @@ public class Item {
 			String desc, String placeholder_image, int is_active, String is_veg, String order_column) {
 		super();
 		this.id = id;
-		this.restaurant_id = restaurant_id;
-		this.item_category_id = item_category_id;
+		this.restaurantId = restaurant_id;
+		this.itemCategoryId = item_category_id;
 		this.name = name;
 		this.price = price;
 		this.old_price = old_price;

@@ -1,12 +1,16 @@
 package dashboard.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import dashboard.dto.OrderBaseResponseDTO;
 import dashboard.dto.OrderResponseDTO;
 import dashboard.dto.PageDTO;
 import dashboard.service.IOrders;
@@ -36,8 +40,11 @@ public class DashboardController {
 	
 	
 	@GetMapping("/")
-	public PageDTO getAllOrders() {
-		return serviceOrders.getAllOrders();
+	public PageDTO getAllOrders(
+			@RequestParam int current_page,
+			@RequestParam int items_on_page
+			){
+		return serviceOrders.getAllOrders(current_page, items_on_page);
 	}
 	
 //	@GetMapping("/items")

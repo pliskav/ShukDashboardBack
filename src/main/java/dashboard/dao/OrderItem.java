@@ -17,19 +17,21 @@ public class OrderItem {
 	int id;
 	@Column(name = "order_id")
 	int orderId;
-	int item_id;
-	String name;
+	@Column(name = "item_id")
+	int itemId;
+	@Column(name = "name")
+	String itemName;
 	int quantity;
 	float price;
 	String created_at;
 	String updated_at;
-	public OrderItem(int id, int orderId, int item_id, String name, int quantity, float price, String created_at,
+	public OrderItem(int id, int orderId, int item_id, String itemName, int quantity, float price, String created_at,
 			String updated_at) {
 		super();
 		this.id = id;
 		this.orderId = orderId;
-		this.item_id = item_id;
-		this.name = name;
+		this.itemId = item_id;
+		this.itemName = itemName;
 		this.quantity = quantity;
 		this.price = price;
 		this.created_at = created_at;

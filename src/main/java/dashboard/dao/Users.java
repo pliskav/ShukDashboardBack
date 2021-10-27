@@ -1,5 +1,6 @@
 package dashboard.dao;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -9,7 +10,8 @@ import javax.persistence.Table;
 public class Users {
 	@Id
 	int id;
-	String name;
+	@Column(name = "name")
+	String userName;
 	String email;
 	String email_verified_at;
 	String password;
@@ -22,7 +24,8 @@ public class Users {
 	String delivery_pin;
 	String delivery_guy_detail_id; 
 	String avatar;
-	String is_active; 
+	@Column(name = "is_active")
+	String userIs_active; 
 	String tax_number;
 	public int getId() {
 		return id;
@@ -30,11 +33,11 @@ public class Users {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
+	public String getUserName() {
+		return userName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	public String getEmail() {
 		return email;
@@ -108,11 +111,11 @@ public class Users {
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
-	public String getIs_active() {
-		return is_active;
+	public String getUserIs_active() {
+		return userIs_active;
 	}
-	public void setIs_active(String is_active) {
-		this.is_active = is_active;
+	public void setUserIs_active(String userIs_active) {
+		this.userIs_active = userIs_active;
 	}
 	public String getTax_number() {
 		return tax_number;
@@ -120,12 +123,13 @@ public class Users {
 	public void setTax_number(String tax_number) {
 		this.tax_number = tax_number;
 	}
-	public Users(int id, String name, String email, String email_verified_at, String password, String remember_token,
-			String created_at, String updated_at, String auth_token, String phone, String default_address_id,
-			String delivery_pin, String delivery_guy_detail_id, String avatar, String is_active, String tax_number) {
+	public Users(int id, String userName, String email, String email_verified_at, String password,
+			String remember_token, String created_at, String updated_at, String auth_token, String phone,
+			String default_address_id, String delivery_pin, String delivery_guy_detail_id, String avatar,
+			String userIs_active, String tax_number) {
 		super();
 		this.id = id;
-		this.name = name;
+		this.userName = userName;
 		this.email = email;
 		this.email_verified_at = email_verified_at;
 		this.password = password;
@@ -138,12 +142,13 @@ public class Users {
 		this.delivery_pin = delivery_pin;
 		this.delivery_guy_detail_id = delivery_guy_detail_id;
 		this.avatar = avatar;
-		this.is_active = is_active;
+		this.userIs_active = userIs_active;
 		this.tax_number = tax_number;
 	}
 	public Users() {
 		super();
 	}
+	
 	
 	
 	

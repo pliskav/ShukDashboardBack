@@ -5,13 +5,13 @@ import java.util.List;
 public class OrderResponseDTO {
 	OrderDTO order;
 	UserOrderDTO user;
-	List<OrderItemDto> orderItemsDtos;
+	List<String> orderItemsDtos;
 	
 	
 	public OrderResponseDTO() {
 		super();
 	}
-	public OrderResponseDTO(OrderDTO order, UserOrderDTO user, List<OrderItemDto> orderItemsDtos) {
+	public OrderResponseDTO(OrderDTO order, UserOrderDTO user, List<String> orderItemsDtos) {
 		super();
 		this.order = order;
 		this.user = user;
@@ -29,10 +29,10 @@ public class OrderResponseDTO {
 	public void setUser(UserOrderDTO user) {
 		this.user = user;
 	}
-	public List<OrderItemDto> getOrderItemsDtos() {
+	public List<String> getOrderItemsDtos() {
 		return orderItemsDtos;
 	}
-	public void setOrderItemsDtos(List<OrderItemDto> orderItemsDtos) {
+	public void setOrderItemsDtos(List<String> orderItemsDtos) {
 		this.orderItemsDtos = orderItemsDtos;
 	}
 	
