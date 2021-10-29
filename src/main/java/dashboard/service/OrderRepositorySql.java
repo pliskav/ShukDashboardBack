@@ -91,15 +91,23 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 			"inner join Item i on i.id=items.itemId " + 
 			"group by o.id",
 			nativeQuery = false)
-	Page<OrderBaseResponseDTO> findAllOrdersJoinUsers(Pageable pageable);
+	Page<OrderBaseResponseDTO> findAllOrdersJoinUsersAndItems(Pageable pageable);
 
 	
 	
-//	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.unique_order_id, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.tax, o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, "
-//			+ "u.name as userName, u.phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.is_active as user_is_active, u.tax_number, "
-//			+ "group_concat (items.orderId, items.item_id, items.name) AS goods "
-//			+ "FROM Orders o inner join Users u on o.user_id=u.id inner join OrderItem items on o.id=items.orderId inner join Item i on i.id=items.item_id", nativeQuery = false)
-//	Page<OrderBaseResponseDTO> findAllOrdersJoinUsers(Pageable pageable);
+	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.unique_order_id, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.tax, "
+			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
+			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, "
+			+ "u.userName, u.phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "
+			+ "group_concat(items.itemId)) " + 
+			"FROM Orders o " + 
+			"inner join Users u on o.user_id=u.id "+
+			"inner join OrderItem items on o.id=items.orderId " + 
+			"group by o.id",
+			nativeQuery = false)
+	Page<OrderBaseResponseDTO> findAllOrdersJoinUsers(Pageable pageable);
+	
+	
 	
 //	@Query(value = "SELECT o.id, o.unique_order_id, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.tax, o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, "
 //			+ "u.name as userName, u.phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.is_active as user_is_active, u.tax_number, "

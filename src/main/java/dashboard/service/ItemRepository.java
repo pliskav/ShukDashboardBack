@@ -9,6 +9,11 @@ import dashboard.dao.Item;
 @Repository
 public interface ItemRepository extends CrudRepository<Item, Integer> {
 	
-	List<Item> findAll();
+	List<Item> findAllById(Iterable<Integer> ids);
+	
+//	List<Item> findById(Iterable<Integer> ids);
+	
 	Item findById(int id);
+	
+	
 }

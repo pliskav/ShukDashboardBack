@@ -1,40 +1,10 @@
 package dashboard.dto;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
 @Builder
 public class OrderItemDto {
-//	int orderId;
-//	int item_id;
-//	String name;
-//	int quantity;
-//	float price;
-//	@Setter
-//	String restaurant_id;
-//	@Setter
-//	int item_category_id; 
-//	@Setter
-//	float old_price; 
-//	@Setter
-//	String image; 
-//	@Setter
-//	int is_recommended; 
-//	@Setter
-//	int is_popular;
-//	@Setter
-//	int is_new; 
-//	@Setter
-//	String desc; 
-//	@Setter
-//	String placeholder_image; 
-//	@Setter
-//	int is_active; 
-//	@Setter
-//	String is_veg; 
-//	@Setter
-//	String order_column;
+
 	
 	int orderId;
 	int itemId;

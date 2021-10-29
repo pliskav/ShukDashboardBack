@@ -1,5 +1,7 @@
 package dashboard.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,13 +10,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class PageDTO {
-	
-	int current_page;
-	int items_on_page;
-	OrderPageDTO orderPage;
-
+public class OrderPageDTO {
+	List<OrderResponseDTO> orders;
+	Iterable<?> items;
 }

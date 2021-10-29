@@ -31,23 +31,6 @@ public class OrderBaseResponseDTO {
 	String delivery_guy_detail_id;
 	String user_is_active;
 	String tax_number;
-//	
-//	int itemOrderId;
-//	int itemId;
-//	String itemName;
-//	float price;
-//	int quantity;
-//	float old_price;
-//	String image;
-//	int item_category_id;
-//	int is_recommended;
-//	int is_popular;
-//	int is_new;
-//	String desc;
-//	String placeholder_image;
-//	int item_is_active;
-//	String is_veg;
-//	String order_column;
 	String goods;
 public OrderBaseResponseDTO(int id, String unique_order_id, int orderstatus_id, int user_id, String coupon_name,
 		String address, String tax, String restaurant_charge, String delivery_charge, String total, String payment_mode,

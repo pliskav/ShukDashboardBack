@@ -2,11 +2,8 @@ package dashboard.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +12,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import dashboard.dao.Item;
 import dashboard.dao.Users;
 import dashboard.dto.OrderBaseResponseDTO;
 import dashboard.dto.OrderDTO;
-import dashboard.dto.OrderItemDto;
+import dashboard.dto.OrderPageDTO;
 import dashboard.dto.OrderResponseDTO;
 import dashboard.dto.PageDTO;
 import dashboard.dto.UserOrderDTO;
@@ -37,53 +35,29 @@ public class IServiceImplementation implements IService, IOrders{
 	ItemRepository itemRepository;
 	
 	public PageDTO getAllOrders(int page, int size) {
-		
 		Pageable pageable = PageRequest.of(page, size);
 		
 		Page<OrderBaseResponseDTO> result = orderRepo.findAllOrdersJoinUsers(pageable);
 		
-		PageDTO res = new PageDTO(page, size, result.getContent().stream()
+		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(result.getContent().stream()
 				.map(item -> convertToOrderResponseDTO(item))
 				.collect(Collectors.toList())
 				);
-		
-		result.stream().forEach(i -> System.out.println(i.getGoods()));
-		
-//		Map<String, OrderResponseDTO> map = new HashMap<>();
-//		ordersJoinedResponseList.stream().forEach(res -> {
-//			if(!map.containsKey(res.getUnique_order_id())) {
-//				
-//				OrderDTO orderDTO = new OrderDTO(res.getId(), res.getUnique_order_id(), res.getOrderstatus_id(), res.getUser_id(), 
-//						res.getCoupon_name(), res.getAddress(), res.getTax(), res.getRestaurant_charge(), res.getDelivery_charge(), 
-//						res.getTotal(), res.getPayment_mode(), res.getOrder_comment(), res.getRestaurant_id(), 
-//						res.getTransaction_id(), res.getDelivery_type(), res.getPayable(), res.getWallet_amount(), res.getTip_amount(), 
-//						res.getTax_amount(), res.getCoupon_amount(), res.getSub_total());
-//				
-//				UserOrderDTO userOrderDTO = new UserOrderDTO(res.getUser_id(), res.getUserName(), res.getEmail(), res.getPhone(), res.getDefault_address_id(), res.getDelivery_pin(), 
-//						res.getDelivery_guy_detail_id(), res.getAvatar(), res.getUser_is_active(), res.getTax_number());
-//				
-//				List<OrderItemDto> itemsDtos = new ArrayList<>();
-//				OrderItemDto itemDto = new OrderItemDto(res.getItemOrderId(), res.getItem_id(), res.getItemName(), res.getQuantity(), res.getPrice(), res.getRestaurant_id(), 
-//						res.getItem_category_id(), res.getOld_price(), res.getImage(), res.getIs_recommended(), res.getIs_popular(), res.getIs_new(), res.getDesc(), 
-//						res.getPlaceholder_image(), res.getItem_is_active(), res.getIs_veg(), res.getOrder_column());
-//				itemsDtos.add(itemDto);
-//				
-//				OrderResponseDTO orderDto = new OrderResponseDTO(orderDTO, userOrderDTO, itemsDtos);	
-//				map.put(res.getUnique_order_id(), orderDto);
-//			}
-//			else {
-//				OrderResponseDTO orderDTO = map.get(res.getUnique_order_id());
-//				List<OrderItemDto> itemsDtos = orderDTO.getOrderItemsDtos();
-//				OrderItemDto itemDto = new OrderItemDto(res.getItemOrderId(), res.getItem_id(), res.getItemName(), res.getQuantity(), res.getPrice(), res.getRestaurant_id(), 
-//						res.getItem_category_id(), res.getOld_price(), res.getImage(), res.getIs_recommended(), res.getIs_popular(), res.getIs_new(), res.getDesc(), 
-//						res.getPlaceholder_image(), res.getItem_is_active(), res.getIs_veg(), res.getOrder_column());
-//				itemsDtos.add(itemDto);
-//				orderDTO.setOrderItemsDtos(itemsDtos);
-//				map.put(res.getUnique_order_id(), orderDTO);
-//			}
-//		});
-//		
-		return new PageDTO(page, size, result.getContent());
+		Set<Integer> itemIds = result.getContent()
+								.stream()
+								.flatMap(response->Arrays.stream(response.getGoods().split(",")).map(str->Integer.parseInt(str)))
+								.collect(Collectors.toSet());
+		List<Item> listItems = itemRepository.findAllById(itemIds);		
+			
+		return PageDTO.builder()
+				.current_page(page)
+				.items_on_page(size)
+				.orderPage(OrderPageDTO
+						.builder()
+						.orders(res)
+						.items(listItems)
+						.build())
+				.build();
 	}
 
 
@@ -95,10 +69,9 @@ public class IServiceImplementation implements IService, IOrders{
 		
 		UserOrderDTO user = new UserOrderDTO(item.getUser_id(), item.getUserName(), item.getEmail(), item.getPhone(), item.getDefault_address_id(), 
 				item.getDelivery_pin(), item.getDelivery_guy_detail_id(), item.getAvatar(), item.getUser_is_active(), item.getTax_number());
-		System.out.println(item.getGoods());
-		List<String> list = new ArrayList<String>();
-		list.add(item.getGoods());
-		return new OrderResponseDTO(order, user, list);
+		String itemIds = item.getGoods();
+		
+		return new OrderResponseDTO(order, user, itemIds);
 	}
 
 
