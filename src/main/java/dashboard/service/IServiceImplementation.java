@@ -45,7 +45,10 @@ public class IServiceImplementation implements IService, IOrders{
 				);
 		Set<Integer> itemIds = result.getContent()
 								.stream()
-								.flatMap(response->Arrays.stream(response.getGoods().split(",")).map(str->Integer.parseInt(str)))
+								.flatMap(response->{
+									List<Integer> idList = Arrays.stream(response.getGoods().split(",")).filter(str -> str.indexOf(str)%2==0).map(str -> Integer.parseInt(str)).collect(Collectors.toList());
+									return idList.stream();
+								})
 								.collect(Collectors.toSet());
 		List<Item> listItems = itemRepository.findAllById(itemIds);		
 			
