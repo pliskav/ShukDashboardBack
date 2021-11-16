@@ -107,6 +107,9 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 			nativeQuery = false)
 	Page<OrderBaseResponseDTO> findAllOrdersJoinUsers(Pageable pageable);
 	
+	@Query(value = "select count(*)as total_count from orders",nativeQuery = true)
+	int findTotalCountOrders();
+	
 	
 	
 //	@Query(value = "SELECT o.id, o.unique_order_id, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.tax, o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, "

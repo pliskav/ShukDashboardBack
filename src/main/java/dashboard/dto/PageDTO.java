@@ -15,6 +15,7 @@ public class PageDTO {
 	
 	int current_page;
 	int items_on_page;
+	int total_count;
 	OrderPageDTO orderPage;
 
 }

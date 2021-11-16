@@ -3,7 +3,7 @@ package dashboard.dto;
 public class OrderBaseResponseDTO {
 	int id;
 	String unique_order_id;
-	int orderstatus_id;
+	Integer orderstatus_id;
 	int user_id;
 	String coupon_name;
 	String address;
@@ -32,7 +32,7 @@ public class OrderBaseResponseDTO {
 	String user_is_active;
 	String tax_number;
 	String goods;
-public OrderBaseResponseDTO(int id, String unique_order_id, int orderstatus_id, int user_id, String coupon_name,
+public OrderBaseResponseDTO(int id, String unique_order_id, Integer orderstatus_id, int user_id, String coupon_name,
 		String address, String tax, String restaurant_charge, String delivery_charge, String total, String payment_mode,
 		String order_comment, String restaurant_id, String transaction_id, String delivery_type, String payable,
 		String wallet_amount, String tip_amount, String tax_amount, String coupon_amount, String sub_total,
@@ -86,10 +86,10 @@ public String getUnique_order_id() {
 public void setUnique_order_id(String unique_order_id) {
 	this.unique_order_id = unique_order_id;
 }
-public int getOrderstatus_id() {
+public Integer getOrderstatus_id() {
 	return orderstatus_id;
 }
-public void setOrderstatus_id(int orderstatus_id) {
+public void setOrderstatus_id(Integer orderstatus_id) {
 	this.orderstatus_id = orderstatus_id;
 }
 public int getUser_id() {
