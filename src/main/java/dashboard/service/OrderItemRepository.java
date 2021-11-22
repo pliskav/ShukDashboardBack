@@ -28,17 +28,7 @@ public interface OrderItemRepository extends CrudRepository<OrderItem, Integer> 
 //where shuk.orders.unique_order_id = 'OD-10-19-TURZ-QG8LPB35N'
 //GROUP BY shuk.orderitems.name
 	
-//	Integer id;
-//	String name;
-//  float price;
-//	String image; 
-// Integer quantity;
-//	Integer limit;
-//	Integer total;
-	// Integer total_items_addon
-	
-//	Integer id, String name, float price, String image, Integer quantity, Integer limit,
-//		Integer total_items_addon
+
 	
 	@Query(value = "SELECT new dashboard.dto.ItemBriefDTO(orderItems.id, orderItems.itemName, orderItems.price, item.image, orderItems.quantity, item.limit, "+
 	"coalesce( SUM(addons.addonName), SUM(orderItems.quantity)))" +

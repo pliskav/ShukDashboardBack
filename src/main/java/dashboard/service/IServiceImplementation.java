@@ -4,10 +4,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import dashboard.dao.Item;
 import dashboard.dao.OrderItem;
@@ -33,6 +27,7 @@ import dashboard.dto.PageDTO;
 import dashboard.dto.UserOrderDTO;
 import dashboard.exceptions.BadRequestException;
 import dashboard.exceptions.NotFoundException;
+import utils.WhatsappMessage;
 
 @Service
 public class IServiceImplementation implements IService, IOrders, IOrderItems{
@@ -233,6 +228,21 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 		List<ItemBriefDTO> list = orderItemRepository.findAllNewItems();
 		return list;
 	}
+
+	public Boolean sendWhatsapp(String orderId) {
+		WhatsappMessage.getInstance().main("972524083393","Sssssssdfdfbg");
+		return true;
+	}
+
+
+	@Override
+	public void editOrder(Integer orderId, OrderBaseResponseDTO orderData) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	
 
 
 
