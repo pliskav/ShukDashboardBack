@@ -23,6 +23,7 @@ import dashboard.dto.OrderResponseDTO;
 import dashboard.dto.PageDTO;
 import dashboard.dto.UserOrderDTO;
 import dashboard.exceptions.BadRequestException;
+import utils.WhatsappMessage;
 
 @Service
 public class IServiceImplementation implements IService, IOrders{
@@ -180,6 +181,13 @@ public class IServiceImplementation implements IService, IOrders{
 		itemsList.forEach(item -> System.out.println(item.getItemName()));
 		
 		
+	}
+
+
+	@Override
+	public Boolean sendWhatsapp(String orderId) {
+		WhatsappMessage.getInstance().main("972524083393","Sssssssdfdfbg");
+		return true;
 	}
 
 

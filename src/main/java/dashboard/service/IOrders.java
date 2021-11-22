@@ -8,5 +8,7 @@ public interface IOrders {
 	public PageDTO getAllOrders(int page, int size);
 	
 	public void editOrder(Integer orderId, OrderBaseResponseDTO orderData);
+	
+	public Boolean sendWhatsapp(String orderId);
 
 }
