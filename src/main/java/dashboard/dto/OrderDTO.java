@@ -4,8 +4,8 @@ public class OrderDTO {
 	
 	int id;
 	String unique_order_id;
-	int orderstatus_id;
-	int user_id;
+	Integer orderstatus_id;
+	Integer user_id;
 	String coupon_name;
 	String address;
 	String tax;
@@ -23,10 +23,11 @@ public class OrderDTO {
 	String tax_amount;
 	String coupon_amount;
 	String sub_total;
-	public OrderDTO(int id, String unique_order_id, int orderstatus_id, int user_id, String coupon_name, String address,
-			String tax, String restaurant_charge, String delivery_charge, String total, String payment_mode,
-			String order_comment, String restaurant_id, String transaction_id, String delivery_type, String payable,
-			String wallet_amount, String tip_amount, String tax_amount, String coupon_amount, String sub_total) {
+	public OrderDTO(int id, String unique_order_id, Integer orderstatus_id, Integer user_id, String coupon_name,
+			String address, String tax, String restaurant_charge, String delivery_charge, String total,
+			String payment_mode, String order_comment, String restaurant_id, String transaction_id,
+			String delivery_type, String payable, String wallet_amount, String tip_amount, String tax_amount,
+			String coupon_amount, String sub_total) {
 		super();
 		this.id = id;
 		this.unique_order_id = unique_order_id;
@@ -50,6 +51,9 @@ public class OrderDTO {
 		this.coupon_amount = coupon_amount;
 		this.sub_total = sub_total;
 	}
+	public OrderDTO() {
+		super();
+	}
 	public int getId() {
 		return id;
 	}
@@ -62,16 +66,16 @@ public class OrderDTO {
 	public void setUnique_order_id(String unique_order_id) {
 		this.unique_order_id = unique_order_id;
 	}
-	public int getOrderstatus_id() {
+	public Integer getOrderstatus_id() {
 		return orderstatus_id;
 	}
-	public void setOrderstatus_id(int orderstatus_id) {
+	public void setOrderstatus_id(Integer orderstatus_id) {
 		this.orderstatus_id = orderstatus_id;
 	}
-	public int getUser_id() {
+	public Integer getUser_id() {
 		return user_id;
 	}
-	public void setUser_id(int user_id) {
+	public void setUser_id(Integer user_id) {
 		this.user_id = user_id;
 	}
 	public String getCoupon_name() {
@@ -176,9 +180,8 @@ public class OrderDTO {
 	public void setSub_total(String sub_total) {
 		this.sub_total = sub_total;
 	}
-	public OrderDTO() {
-		super();
-	}
+	
+	
 	
 	
 

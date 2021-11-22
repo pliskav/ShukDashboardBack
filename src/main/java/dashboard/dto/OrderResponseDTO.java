@@ -1,19 +1,19 @@
 package dashboard.dto;
 
+import java.util.List;
+
 public class OrderResponseDTO {
 	OrderDTO order;
 	UserOrderDTO user;
-	String orderItemsDtos;
-	
-	
-	public OrderResponseDTO() {
-		super();
-	}
-	public OrderResponseDTO(OrderDTO order, UserOrderDTO user, String orderItemsDtos) {
+	List<ItemData> orderItemsDtos;
+	public OrderResponseDTO(OrderDTO order, UserOrderDTO user, List<ItemData> orderItemsDtos) {
 		super();
 		this.order = order;
 		this.user = user;
 		this.orderItemsDtos = orderItemsDtos;
+	}
+	public OrderResponseDTO() {
+		super();
 	}
 	public OrderDTO getOrder() {
 		return order;
@@ -27,12 +27,15 @@ public class OrderResponseDTO {
 	public void setUser(UserOrderDTO user) {
 		this.user = user;
 	}
-	public String getOrderItemsDtos() {
+	public List<ItemData> getOrderItemsDtos() {
 		return orderItemsDtos;
 	}
-	public void setOrderItemsDtos(String orderItemsDtos) {
+	public void setOrderItemsDtos(List<ItemData> orderItemsDtos) {
 		this.orderItemsDtos = orderItemsDtos;
 	}
+	
+	
+	
 	
 	
 	

@@ -1,5 +1,11 @@
 package dashboard.controller;
 
+import java.io.Console;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import dashboard.dto.ItemBriefDTO;
 import dashboard.dto.OrderBaseResponseDTO;
+import dashboard.dto.OrderResponseDTO;
 import dashboard.dto.PageDTO;
+import dashboard.service.IOrderItems;
 import dashboard.service.IOrders;
 import dashboard.service.IService;
 import dashboard.service.ItemRepository;
@@ -31,6 +41,8 @@ public class DashboardController {
 	IService service;
 	@Autowired
 	IOrders serviceOrders;
+	@Autowired
+	IOrderItems itemsService;
 	@Autowired
 	ItemRepository itemRepo;
 	@Autowired
@@ -53,10 +65,27 @@ public class DashboardController {
 	
 	@PutMapping("/order/{orderId}")
 	public void editOrder(
-			@RequestBody OrderBaseResponseDTO order,
+			@RequestBody OrderResponseDTO order,
 			@PathVariable Integer orderId
 			) {
 			serviceOrders.editOrder(orderId, order);
+	}
+	
+	@PutMapping("/order/{orderId}/status")
+	public void editOrderStatus(
+			@RequestBody String orderStatus,
+			@PathVariable Integer orderId,
+			HttpServletRequest request,
+			HttpServletResponse response
+			) {
+		System.out.println(request);
+		System.out.println(response);
+		serviceOrders.changeOrderStatus(orderId, Integer.parseInt(orderStatus));
+	}
+	
+	@GetMapping("/items")
+	public List<ItemBriefDTO> getAllItems(){
+		return itemsService.getAllBriefDTOs();
 	}
 //	@PostMapping("/send-whatsapp")
 //	public Boolean sendWhatsapp(@RequestBody String orderId) {

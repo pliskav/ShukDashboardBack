@@ -33,13 +33,14 @@ public class Item {
 	int is_active; 
 	String is_veg; 
 	String order_column;
-	public Item(int id, int restaurant_id, int item_category_id, String name, float price, float old_price,
-			String image, int is_recommended, int is_popular, int is_new, String created_at, String updated_at,
-			String desc, String placeholder_image, int is_active, String is_veg, String order_column) {
+	Integer limit;
+	public Item(int id, int restaurantId, int itemCategoryId, String name, float price, float old_price, String image,
+			int is_recommended, int is_popular, int is_new, String created_at, String updated_at, String desc,
+			String placeholder_image, int is_active, String is_veg, String order_column, Integer limit) {
 		super();
 		this.id = id;
-		this.restaurantId = restaurant_id;
-		this.itemCategoryId = item_category_id;
+		this.restaurantId = restaurantId;
+		this.itemCategoryId = itemCategoryId;
 		this.name = name;
 		this.price = price;
 		this.old_price = old_price;
@@ -54,10 +55,12 @@ public class Item {
 		this.is_active = is_active;
 		this.is_veg = is_veg;
 		this.order_column = order_column;
+		this.limit = limit;
 	}
 	public Item() {
 		super();
 	}
+	
 	
 	
 	
