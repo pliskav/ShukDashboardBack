@@ -99,7 +99,7 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
 			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, "
 			+ "u.userName, u.phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "
-			+ "group_concat(items.itemId, ',', items.quantity, ';')) " + 
+			+ "group_concat(items.itemId, ',', items.quantity, ',', items.price, ';')) " + 
 			"FROM Orders o " + 
 			"inner join Users u on o.user_id=u.id "+
 			"inner join OrderItem items on o.id=items.orderId " + 

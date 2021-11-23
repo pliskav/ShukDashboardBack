@@ -2,9 +2,6 @@ package dashboard.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,12 +70,8 @@ public class DashboardController {
 	@PutMapping("/order/{orderId}/status")
 	public void editOrderStatus(
 			@RequestBody String orderStatus,
-			@PathVariable Integer orderId,
-			HttpServletRequest request,
-			HttpServletResponse response
+			@PathVariable Integer orderId
 			) {
-		System.out.println(request);
-		System.out.println(response);
 		serviceOrders.changeOrderStatus(orderId, Integer.parseInt(orderStatus));
 	}
 	

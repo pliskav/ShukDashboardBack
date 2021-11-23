@@ -33,6 +33,10 @@ public class OrderResponseDTO {
 	public void setOrderItemsDtos(List<ItemData> orderItemsDtos) {
 		this.orderItemsDtos = orderItemsDtos;
 	}
+	@Override
+	public String toString() {
+		return "OrderResponseDTO [...orderItemsDtos=" + this.orderItemsDtos.toString() + "]";
+	}
 	
 	
 	

@@ -56,7 +56,6 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 		Set<Integer> itemIdSet = res.stream().flatMap(order -> order.getOrderItemsDtos().stream().map(data -> data.getId())).collect(Collectors.toSet());
 
 		List<Item> listItems = itemRepository.findAllById(itemIdSet);
-		listItems.stream().forEach(item -> System.out.println(item.getName()));
 		int totalOrdersCount = orderRepo.findTotalCountOrders();
 			
 		return PageDTO.builder()
@@ -89,7 +88,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 		List<String> arrItems = Arrays.asList(strArray);
 		List<ItemData> goodsList = arrItems.stream().map(arrayString -> arrayString.split(","))
 		.map(array -> {
-			return new ItemData(Integer.parseInt(array[0]), Integer.parseInt(array[1]), item.getId());
+			return new ItemData(Integer.parseInt(array[0]), Integer.parseInt(array[1]), item.getId(), Float.parseFloat(array[2]));
 		})
 		.collect(Collectors.toList());
 		
@@ -120,95 +119,109 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 
 	@Override
 	public void editOrder(Integer orderId, OrderResponseDTO orderData) {
+		System.out.println("Editing order");
 		if (orderData == null || orderId == null) {
 			throw new BadRequestException();
 		}
-		OrderDTO orderSent = orderData.getOrder();
-		Orders orderEdit = orderRepo.findById(orderId).orElseThrow(() -> new BadRequestException());
+		System.out.println(orderId);
+		System.out.println(orderData.toString());
 		
-		if(orderSent.getAddress()!= null) {
-			orderEdit.setAddress(orderSent.getAddress());
+		if(orderData.getOrder()!=null) {
+			OrderDTO orderSent = orderData.getOrder();
+			System.out.println(orderSent.toString());
+			Orders orderEdit = orderRepo.findById(orderId).orElseThrow(() -> new BadRequestException());
+
+			if(!orderSent.getAddress().equals(null)) {
+				orderEdit.setAddress(orderSent.getAddress());
+			}
+			if(orderSent.getOrderstatus_id()!=null) {
+				orderEdit.setOrderstatus_id(orderSent.getOrderstatus_id());
+			}
+			if(orderSent.getCoupon_amount()!= null) {
+				orderEdit.setCoupon_amount(orderSent.getCoupon_amount());
+			}
+			if(orderSent.getCoupon_name()!=null) {
+				orderEdit.setCoupon_name(orderSent.getCoupon_name());
+			}
+			if(orderSent.getTax()!=null) {
+				orderEdit.setTax(orderSent.getTax());
+			}
+			if(orderSent.getRestaurant_charge()!=null) {
+				orderEdit.setRestaurant_charge(orderSent.getRestaurant_charge());
+			}
+			if(orderSent.getDelivery_charge()!=null) {
+				orderEdit.setDelivery_charge(orderSent.getDelivery_charge());
+			}
+			if(orderSent.getTotal()!=null) {
+				orderEdit.setTotal(orderSent.getTotal());
+			}
+			if(orderSent.getPayment_mode()!=null) {
+				orderEdit.setPayment_mode(orderSent.getPayment_mode());
+			}
+			if(orderSent.getOrder_comment()!=null) {
+				orderEdit.setOrder_comment(orderSent.getOrder_comment());
+			}
+			if(orderSent.getRestaurant_id()!=null) {
+				orderEdit.setRestaurant_id(orderSent.getRestaurant_id());
+			}
+			if(orderSent.getTransaction_id()!=null) {
+				orderEdit.setTransaction_id(orderSent.getTransaction_id());
+			}
+			if(orderSent.getDelivery_type()!=null) {
+				orderEdit.setDelivery_type(orderSent.getDelivery_type());
+			}
+			if(orderSent.getPayable()!=null) {
+				orderEdit.setPayable(orderSent.getPayable());
+			}
+			if(orderSent.getWallet_amount()!=null) {
+				orderEdit.setWallet_amount(orderSent.getWallet_amount());
+			}
+			if(orderSent.getTip_amount()!=null) {
+				orderEdit.setTip_amount(orderSent.getTip_amount());
+			}
+			if(orderSent.getTax_amount()!=null) {
+				orderEdit.setTax_amount(orderSent.getTax_amount());
+			}
+			if(orderSent.getSub_total()!=null) {
+				orderEdit.setSub_total(orderSent.getSub_total());
+			}
+			Date date = Date.valueOf(LocalDate.now());
+			orderEdit.setUpdated_at(date);
+			orderRepo.save(orderEdit);
+		}else {
+			System.out.println("no new data on order itself");
 		}
-		if(orderSent.getOrderstatus_id()!=null) {
-			orderEdit.setOrderstatus_id(orderSent.getOrderstatus_id());
+		
+		if(orderData.getOrderItemsDtos()!=null) {
+			Orders orderEdit = orderRepo.findById(orderId).orElseThrow(() -> new BadRequestException());
+		
+			String totalPrice = (orderData.getOrderItemsDtos()
+					.stream()
+					.map(item -> item.getPrice()*item.getQuantity())
+					.reduce((float)0, Float::sum)).toString();
+			System.out.println(totalPrice);
+			orderEdit.setTotal(totalPrice);
+			orderRepo.save(orderEdit);
 		}
-		if(orderSent.getCoupon_amount()!= null) {
-			orderEdit.setCoupon_amount(orderSent.getCoupon_amount());
-		}
-		if(orderSent.getCoupon_name()!=null) {
-			orderEdit.setCoupon_name(orderSent.getCoupon_name());
-		}
-		if(orderSent.getTax()!=null) {
-			orderEdit.setTax(orderSent.getTax());
-		}
-		if(orderSent.getRestaurant_charge()!=null) {
-			orderEdit.setRestaurant_charge(orderSent.getRestaurant_charge());
-		}
-		if(orderSent.getDelivery_charge()!=null) {
-			orderEdit.setDelivery_charge(orderSent.getDelivery_charge());
-		}
-		if(orderSent.getTotal()!=null) {
-			orderEdit.setTotal(orderSent.getTotal());
-		}
-		if(orderSent.getPayment_mode()!=null) {
-			orderEdit.setPayment_mode(orderSent.getPayment_mode());
-		}
-		if(orderSent.getOrder_comment()!=null) {
-			orderEdit.setOrder_comment(orderSent.getOrder_comment());
-		}
-		if(orderSent.getRestaurant_id()!=null) {
-			orderEdit.setRestaurant_id(orderSent.getRestaurant_id());
-		}
-		if(orderSent.getTransaction_id()!=null) {
-			orderEdit.setTransaction_id(orderSent.getTransaction_id());
-		}
-		if(orderSent.getDelivery_type()!=null) {
-			orderEdit.setDelivery_type(orderSent.getDelivery_type());
-		}
-		if(orderSent.getPayable()!=null) {
-			orderEdit.setPayable(orderSent.getPayable());
-		}
-		if(orderSent.getWallet_amount()!=null) {
-			orderEdit.setWallet_amount(orderSent.getWallet_amount());
-		}
-		if(orderSent.getTip_amount()!=null) {
-			orderEdit.setTip_amount(orderSent.getTip_amount());
-		}
-		if(orderSent.getTax_amount()!=null) {
-			orderEdit.setTax_amount(orderSent.getTax_amount());
-		}
-		if(orderSent.getSub_total()!=null) {
-			orderEdit.setSub_total(orderSent.getSub_total());
-		}
-		Date date = Date.valueOf(LocalDate.now());
-		orderEdit.setUpdated_at(date);
-		orderRepo.save(orderEdit);
+		
 		List<ItemData> list = orderData.getOrderItemsDtos();
 		List<Integer> itemIdList = list.stream().map(data -> data.getId()).collect(Collectors.toList());
-		list.stream().forEach(item -> System.out.println(item.getQuantity()));
-		List<OrderItem> orderItems = orderItemRepository.findAllById(itemIdList);
-//		orderItems.stream().forEach(item -> {
-//			ItemData data = list.stream().findAny(data -> data.getOrderId()==item.getOrderId()).orElseThrow(() -> new NotFoundException());
-//		});
+
+
+		List<OrderItem> itemList = orderItemRepository.getAllByOrderIdAndItemIdIn(orderId, itemIdList);
+		itemList.forEach(item -> System.out.println(item.getOrderId() + " order number, " + item.getItemName() + " item name from base"));
 		
-//		Map<Integer, Integer> itemsMap = new HashMap<Integer, Integer>();
-//		List<String> arrItems = Arrays.asList(orderData.getOrderItemsDtos().split(","));
-//		arrItems.stream().forEach(str -> itemsMap.put(, value));
-//		
-//		List<Integer> itemIds = arrItems.stream().filter((str) -> arrItems.indexOf(str)%2==0).map(str -> Integer.parseInt(str)).collect(Collectors.toList());
-//		itemIds.forEach(item -> System.out.println(item));
-//		
-//		List<Integer> itemQantity = arrItems.stream().filter((str) -> arrItems.indexOf(str)%2!=0).map(str -> Integer.parseInt(str)).collect(Collectors.toList());
-//		itemQantity.forEach(item->System.out.println(item));
-//		
-//		List<OrderItem> itemsList = orderItemRepository.findAllById(itemIds);
-//		
-//		itemsList.stream().forEach((item, index) -> item.setQuantity(itemQantity.get(index)));
-//		
-//		
-//		itemsList.forEach(item -> System.out.println(item.getItemName()));
+
+		itemList.stream().forEach(orderItem -> {
 		
-		
+			ItemData itemEdited = list.stream()
+					.filter(item ->(item.getId()==orderItem.getItemId()) && (item.getOrderId()==orderItem.getOrderId()))
+					.findFirst().orElseThrow(() -> new NotFoundException());
+			System.out.println(orderItem.getOrderId());
+			System.out.println(itemEdited.getOrderId());
+			orderItem.setQuantity(itemEdited.getQuantity());
+		});	
+		orderItemRepository.saveAll(itemList);
 	}
 
 
@@ -235,11 +248,6 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 	}
 
 
-	@Override
-	public void editOrder(Integer orderId, OrderBaseResponseDTO orderData) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 	

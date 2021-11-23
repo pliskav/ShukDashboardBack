@@ -180,6 +180,11 @@ public class OrderDTO {
 	public void setSub_total(String sub_total) {
 		this.sub_total = sub_total;
 	}
+	@Override
+	public String toString() {
+		return "OrderDTO [id=" + id + ", unique_order_id=" + unique_order_id + ", orderstatus_id=" + orderstatus_id
+				+ ", total=" + total + "]";
+	}
 	
 	
 	

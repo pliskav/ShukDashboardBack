@@ -16,26 +16,18 @@ public interface OrderItemRepository extends CrudRepository<OrderItem, Integer> 
 	
 	List<OrderItem> findAllById(Iterable<Integer> ids);
 	
+	List<OrderItem> getAllByOrderIdAndItemIdIn(int orderId, Iterable<Integer> ids);
+	
 	List<OrderItem> findAllByOrderId(int orderid);
 	
 	OrderItem findById(int id);
-	
-//	SELECT shuk.orderitems.name,
-//	(case when ISNULL(shuk.order_item_addons.addon_name) then SUM(shuk.orderitems.quantity) else sum(shuk.order_item_addons.addon_name)  end)   as total_items_addon
-//FROM shuk.orderitems  
-//left join shuk.order_item_addons on shuk.orderitems.id=shuk.order_item_addons.orderitem_id
-//join shuk.orders on shuk.orders.id=shuk.orderitems.order_id
-//where shuk.orders.unique_order_id = 'OD-10-19-TURZ-QG8LPB35N'
-//GROUP BY shuk.orderitems.name
-	
-
 	
 	@Query(value = "SELECT new dashboard.dto.ItemBriefDTO(orderItems.id, orderItems.itemName, orderItems.price, item.image, orderItems.quantity, item.limit, "+
 	"coalesce( SUM(addons.addonName), SUM(orderItems.quantity)))" +
 			"FROM OrderItem orderItems " + 
 			"left join OrderItemAddons addons on orderItems.id=addons.orderItemId "+
 			"inner join Item item on orderItems.itemId=item.id "+
-			"group by orderItems.itemId",
+			"group by orderItems.itemName",
 			nativeQuery = false)
 	List<ItemBriefDTO> findAllNewItems();
 	
