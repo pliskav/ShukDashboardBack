@@ -23,10 +23,10 @@ public interface OrderItemRepository extends CrudRepository<OrderItem, Integer> 
 	OrderItem findById(int id);
 	
 	@Query(value = "SELECT new dashboard.dto.ItemBriefDTO(orderItems.id, orderItems.itemName, orderItems.price, item.image, orderItems.quantity, item.limit, "+
-	"coalesce( SUM(addons.addonName), SUM(orderItems.quantity)))" +
+	"coalesce( SUM(orderItems.quantity), SUM(addons.addonName)))" +
 			"FROM OrderItem orderItems " + 
 			"left join OrderItemAddons addons on orderItems.id=addons.orderItemId "+
-			"inner join Item item on orderItems.itemId=item.id "+
+			"inner join Item item on orderItems.itemName=item.name "+
 			"group by orderItems.itemName",
 			nativeQuery = false)
 	List<ItemBriefDTO> findAllNewItems();

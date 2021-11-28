@@ -18,7 +18,7 @@ public class ItemData {
 	float price;
 	@Override
 	public String toString() {
-		return "ItemData [id=" + id + ", quantity=" + quantity + ", orderId=" + orderId + "]";
+		return "ItemData [id=" + id + ", quantity=" + quantity + ", orderId=" + orderId + ", price=" + price + "]";
 	}
 	
 	

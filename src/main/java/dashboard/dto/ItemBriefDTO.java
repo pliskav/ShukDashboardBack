@@ -1,11 +1,15 @@
 package dashboard.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class ItemBriefDTO {
 	
@@ -16,20 +20,7 @@ public class ItemBriefDTO {
 	Integer quantity;
 	Integer limit;
 	Long totalItemsAddon;
-	public ItemBriefDTO(Integer id, String name, float price, String image, Integer quantity, Integer limit,
-			Long totalItemsAddon) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.price = price;
-		this.image = image;
-		this.quantity = quantity;
-		this.limit = limit;
-		this.totalItemsAddon = totalItemsAddon;
-	}
-	public ItemBriefDTO() {
-		super();
-	}
+	
 	
 	
 		
