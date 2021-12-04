@@ -58,6 +58,26 @@ public class DashboardController {
 		}	
 	}
 	
+	@GetMapping("/orders/search")
+	public PageDTO getOrdersbyFilters(
+		@RequestParam(required = false) String userEmail,
+		@RequestParam(required = false) String userPhone,
+		@RequestParam(required = false) String userName, 
+		@RequestParam(required = false) String orderDate,
+		
+		@RequestParam(required = false) String orderItem,
+		@RequestParam(required = false) Integer storeId,
+			
+		@RequestParam(required = false) Integer current_page, 
+		@RequestParam(required = false) Integer items_on_page){
+		if(current_page == null || items_on_page == null) {
+			return serviceOrders.findOrdersByFilters(userEmail, userPhone, userName, orderDate, storeId, 0,5);
+		}else {
+			return serviceOrders.findOrdersByFilters(userEmail, userPhone, userName, orderDate, storeId, current_page, items_on_page);
+		}
+		
+	}
+	
 	
 	@PutMapping("/order/{orderId}")
 	public void editOrder(

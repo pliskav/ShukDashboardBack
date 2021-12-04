@@ -8,6 +8,9 @@ public interface IOrders {
 	
 	public PageDTO getAllOrders(int page, int size);
 	
+	public PageDTO findOrdersByFilters(String userEmail, String userPhone, String userName, String orderDate,
+			Integer storeId, Integer current_page, Integer items_on_page);
+	
 
 	public void editOrder(Integer orderId, OrderResponseDTO orderData);
 	

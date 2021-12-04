@@ -70,12 +70,63 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 				.build();
 	}
 
+	@Override
+	public PageDTO findOrdersByFilters(String userEmail, String userPhone, String userName, String orderDate,
+			Integer storeId, Integer page, Integer size) {
+		System.out.println(userEmail);
+		System.out.println(userPhone);
+		System.out.println("+" + userPhone);
+		System.out.println("first character " + userPhone.charAt(0) + " at phone number");
+		if (userEmail==null||userEmail=="") {
+			userEmail="";
+		}
+		if (userPhone==null||userPhone=="") {
+			userPhone="";
+		}
+		if (userName==null||userName=="") {
+			userName="";
+		}
+		if (orderDate==null||orderDate=="") {
+			orderDate="";
+		}
+		if (storeId==null) {
+			storeId=0;
+		}
+		
+		
+		Pageable pageable = PageRequest.of(page, size);
+		
+		Page<OrderBaseResponseDTO> result = orderRepo.findAllOrdersJoinUserswithFilters(userEmail, userPhone, pageable);
+		System.out.println(result.getContent().size());
+		
+		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(result.getContent().stream()
+				.map(item -> convertToOrderResponseDTO(item))
+				.collect(Collectors.toList())
+				);
+		
+				
+		Set<Integer> itemIdSet = res.stream().flatMap(order -> order.getOrderItemsDtos().stream().map(data -> data.getId())).collect(Collectors.toSet());
+
+		List<Item> listItems = itemRepository.findAllById(itemIdSet);
+		int totalOrdersCount = orderRepo.findTotalCountOrders();
+			
+		return PageDTO.builder()
+				.current_page(page)
+				.items_on_page(res.size())
+				.total_count(totalOrdersCount)
+				.orderPage(OrderPageDTO
+						.builder()
+						.orders(res)
+						.items(listItems)
+						.build())
+				.build();
+	}
 
 	private OrderResponseDTO convertToOrderResponseDTO(OrderBaseResponseDTO item) {
 		OrderDTO order = new OrderDTO(item.getId(), item.getUnique_order_id(), item.getOrderstatus_id(), item.getUser_id(), item.getCoupon_name(), item.getAddress(), 
 				item.getTax(), item.getRestaurant_charge(), item.getDelivery_charge(), item.getTotal(), item.getPayment_mode(), item.getOrder_comment(), item.getRestaurant_id(), 
 				item.getTransaction_id(), item.getDelivery_type(), item.getPayable(), item.getWallet_amount(), item.getTip_amount(), item.getTax_amount(), 
-				item.getCoupon_amount(), item.getSub_total());
+				item.getCoupon_amount(), item.getSub_total(), item.getIs_scheduled(), item.getOrderDate(), item.getOrderTime());
 		
 		UserOrderDTO user = new UserOrderDTO(item.getUser_id(), item.getUserName(), item.getEmail(), item.getPhone(), item.getDefault_address_id(), 
 				item.getDelivery_pin(), item.getDelivery_guy_detail_id(), item.getAvatar(), item.getUser_is_active(), item.getTax_number());
@@ -246,6 +297,9 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 		WhatsappMessage.getInstance().main("972524083393","Sssssssdfdfbg");
 		return true;
 	}
+
+
+	
 
 
 
