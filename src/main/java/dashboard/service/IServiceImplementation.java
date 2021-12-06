@@ -43,20 +43,24 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 	ItemRepository itemRepository;
 	
 	public PageDTO getAllOrders(int page, int size) {
-		Pageable pageable = PageRequest.of(page, size);
 		
+		int totalOrdersCount = orderRepo.findTotalCountOrders();
+		
+		size = size!=0 ? size: totalOrdersCount;
+		
+		Pageable pageable = PageRequest.of(page, size);
+					
 		Page<OrderBaseResponseDTO> result = orderRepo.findAllOrdersJoinUsers(pageable);
 		
 		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(result.getContent().stream()
 				.map(item -> convertToOrderResponseDTO(item))
 				.collect(Collectors.toList())
 				);
-		
-				
+						
 		Set<Integer> itemIdSet = res.stream().flatMap(order -> order.getOrderItemsDtos().stream().map(data -> data.getId())).collect(Collectors.toSet());
 
 		List<Item> listItems = itemRepository.findAllById(itemIdSet);
-		int totalOrdersCount = orderRepo.findTotalCountOrders();
+		
 			
 		return PageDTO.builder()
 				.current_page(page)
