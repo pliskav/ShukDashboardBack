@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import dashboard.configuration.Params;
 import dashboard.dto.ItemBriefDTO;
 import dashboard.dto.OrderResponseDTO;
 import dashboard.dto.PageDTO;
@@ -23,6 +24,7 @@ import dashboard.service.ItemRepository;
 import dashboard.service.OrderItemRepository;
 import dashboard.service.OrderRepositorySql;
 import dashboard.service.UserRepositorySql;
+
 
 @CrossOrigin
 @RestController
@@ -43,6 +45,8 @@ public class DashboardController {
 	ItemRepository itemRepo;
 	@Autowired
 	OrderItemRepository orderItemRepo;
+	@Autowired
+	Params params;
 	
 	
 	@GetMapping("/")
@@ -50,12 +54,7 @@ public class DashboardController {
 			@RequestParam(required=false) Integer current_page,
 			@RequestParam(required=false) Integer items_on_page
 			){
-		if(current_page == null || items_on_page == null) {
-			return serviceOrders.getAllOrders(0, 5);
-		}
-		else {
-			return serviceOrders.getAllOrders(current_page, items_on_page);
-		}	
+		return serviceOrders.findOrdersByFilters(null, null, null, null, null, null, current_page, items_on_page);
 	}
 	
 	@GetMapping("/orders/search")
@@ -70,11 +69,9 @@ public class DashboardController {
 			
 		@RequestParam(required = false) Integer current_page, 
 		@RequestParam(required = false) Integer items_on_page){
-		if(current_page == null || items_on_page == null) {
-			return serviceOrders.findOrdersByFilters(userEmail, userPhone, userName, orderDate, storeId, 0,5);
-		}else {
-			return serviceOrders.findOrdersByFilters(userEmail, userPhone, userName, orderDate, storeId, current_page, items_on_page);
-		}
+		
+			return serviceOrders.findOrdersByFilters(userEmail, userPhone, userName, orderDate, storeId, orderItem, current_page, items_on_page);
+		
 		
 	}
 	

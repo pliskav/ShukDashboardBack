@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import dashboard.configuration.Params;
 import dashboard.dao.Item;
 import dashboard.dao.OrderItem;
 import dashboard.dao.Orders;
@@ -41,81 +42,148 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 	OrderItemRepository orderItemRepository;
 	@Autowired
 	ItemRepository itemRepository;
+	@Autowired
+	Params params;
 	
-	public PageDTO getAllOrders(int page, int size) {
-		
-		int totalOrdersCount = orderRepo.findTotalCountOrders();
-		
-		size = size!=0 ? size: totalOrdersCount;
-		
-		Pageable pageable = PageRequest.of(page, size);
-					
-		Page<OrderBaseResponseDTO> result = orderRepo.findAllOrdersJoinUsers(pageable);
-		
-		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(result.getContent().stream()
-				.map(item -> convertToOrderResponseDTO(item))
-				.collect(Collectors.toList())
-				);
-						
-		Set<Integer> itemIdSet = res.stream().flatMap(order -> order.getOrderItemsDtos().stream().map(data -> data.getId())).collect(Collectors.toSet());
-
-		List<Item> listItems = itemRepository.findAllById(itemIdSet);
-		
-			
-		return PageDTO.builder()
-				.current_page(page)
-				.items_on_page(size)
-				.total_count(totalOrdersCount)
-				.orderPage(OrderPageDTO
-						.builder()
-						.orders(res)
-						.items(listItems)
-						.build())
-				.build();
-	}
+//	public PageDTO getAllOrders(Integer current_page, Integer items_on_page) {
+//		
+//		int totalOrdersCount = orderRepo.findTotalCountOrders();
+//		if(current_page==null && items_on_page==null) {
+//			
+//			current_page=params.getDefault_page_number();
+//			items_on_page = totalOrdersCount;
+//		}
+//		if(current_page == null) {
+//			
+//			current_page=params.getDefault_page_number();
+//		}
+//		if(items_on_page==null) {
+//			
+//			items_on_page=params.getDefault_items_count();
+//		}
+//		
+//		
+//				
+//		Pageable pageable = PageRequest.of(current_page, items_on_page);
+//
+//		Page<OrderBaseResponseDTO> result = orderRepo.findAllOrdersJoinUsers(pageable);
+//
+//		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(result.getContent().stream()
+//				.map(item -> convertToOrderResponseDTO(item))
+//				.collect(Collectors.toList())
+//				);
+//						
+//		Set<Integer> itemIdSet = res.stream().flatMap(order -> order.getOrderItemsDtos().stream().map(data -> data.getId())).collect(Collectors.toSet());
+//
+//		List<Item> listItems = itemRepository.findAllById(itemIdSet);
+//		
+//			
+//		return PageDTO.builder()
+//				.current_page(current_page)
+//				.items_on_page(res.size())
+//				.total_count(totalOrdersCount)
+//				.orderPage(OrderPageDTO
+//						.builder()
+//						.orders(res)
+//						.items(listItems)
+//						.build())
+//				.build();
+//	}
 
 	@Override
 	public PageDTO findOrdersByFilters(String userEmail, String userPhone, String userName, String orderDate,
-			Integer storeId, Integer page, Integer size) {
-		System.out.println(userEmail);
-		System.out.println(userPhone);
-		System.out.println("+" + userPhone);
-		System.out.println("first character " + userPhone.charAt(0) + " at phone number");
+			Integer storeId, String orderItem, Integer current_page, Integer items_on_page) {
+		
+		int totalOrdersCount = orderRepo.findTotalCountOrders();
+		
+		if(current_page==null && items_on_page==null) {
+			
+			current_page=params.getDefault_page_number();
+			items_on_page = totalOrdersCount;
+		}
+		if(current_page == null) {
+			
+			current_page=params.getDefault_page_number();
+		}
+		if(items_on_page==null) {
+			
+			items_on_page=params.getDefault_items_count();
+		}
 		if (userEmail==null||userEmail=="") {
-			userEmail="";
+			userEmail=null;
 		}
 		if (userPhone==null||userPhone=="") {
-			userPhone="";
+			userPhone=null;
 		}
 		if (userName==null||userName=="") {
-			userName="";
+			userName=null;
 		}
 		if (orderDate==null||orderDate=="") {
-			orderDate="";
+			orderDate=null;
 		}
-		if (storeId==null) {
-			storeId=0;
+		if(orderItem == null || orderItem == "") {
+			orderItem = null;
+		}
+		
+		if(userPhone != null) {
+			if(userPhone.charAt(0)==32) {
+				userPhone = "+" + userPhone.strip();
+			}
+		}
+		if(orderDate!=null) {
+			orderDate = "%".concat(orderDate).concat("%");
+		}
+		if(orderItem!=null) {
+			System.out.println(orderItem);
+			orderItem = "%".concat(orderItem).concat("%");
 		}
 		
 		
-		Pageable pageable = PageRequest.of(page, size);
+		Pageable pageable = PageRequest.of(current_page, items_on_page);
 		
-		Page<OrderBaseResponseDTO> result = orderRepo.findAllOrdersJoinUserswithFilters(userEmail, userPhone, pageable);
-		System.out.println(result.getContent().size());
+		Page<OrderBaseResponseDTO> result = null;
+		
+		if(userEmail==null && userName==null && userPhone==null && orderDate==null && storeId==null && orderItem==null) {
+			result = orderRepo.findAllOrdersJoinUsers(pageable);
+		}
+		else if(orderItem!=null){
+			result = orderRepo.findAllOrdersJoinUsersWithAllFilters(
+					userEmail, 
+					userPhone, 
+					userName, 
+					orderDate, 
+					storeId==null ? null : storeId.toString(), 
+					orderItem, 
+					pageable
+					);
+			System.out.println(result.getContent().size());
+		}
+		else{
+			result = orderRepo.findAllOrdersJoinUserswithFilters(
+					userEmail, 
+					userPhone, 
+					userName, 
+					orderDate, 
+					storeId==null ? null : storeId.toString(), 
+					pageable
+					);
+		}
 		
 		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(result.getContent().stream()
-				.map(item -> convertToOrderResponseDTO(item))
-				.collect(Collectors.toList())
-				);
+																		.map(this::convertToOrderResponseDTO)
+																		.collect(Collectors.toList()));
 		
-				
-		Set<Integer> itemIdSet = res.stream().flatMap(order -> order.getOrderItemsDtos().stream().map(data -> data.getId())).collect(Collectors.toSet());
+		Set<Integer> itemIdSet = res
+									.stream()
+									.flatMap(order -> order.getOrderItemsDtos()
+															.stream()
+															.map(data -> data.getId()))
+									.collect(Collectors.toSet());
 
 		List<Item> listItems = itemRepository.findAllById(itemIdSet);
-		int totalOrdersCount = orderRepo.findTotalCountOrders();
-			
+	
 		return PageDTO.builder()
-				.current_page(page)
+				.current_page(current_page)
 				.items_on_page(res.size())
 				.total_count(totalOrdersCount)
 				.orderPage(OrderPageDTO
@@ -143,7 +211,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 		List<String> arrItems = Arrays.asList(strArray);
 		List<ItemData> goodsList = arrItems.stream().map(arrayString -> arrayString.split(","))
 		.map(array -> {
-			return new ItemData(Integer.parseInt(array[0]), Integer.parseInt(array[1]), item.getId(), Float.parseFloat(array[2]));
+			return new ItemData(Integer.parseInt(array[0]), Integer.parseInt(array[1]), item.getId(), Float.parseFloat(array[2]), array[3]);
 		})
 		.collect(Collectors.toList());
 		
@@ -174,16 +242,13 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 
 	@Override
 	public void editOrder(Integer orderId, OrderResponseDTO orderData) {
-		System.out.println("Editing order");
 		if (orderData == null || orderId == null) {
 			throw new BadRequestException();
 		}
-		System.out.println(orderId);
-		System.out.println(orderData.toString());
 		
 		if(orderData.getOrder()!=null) {
 			OrderDTO orderSent = orderData.getOrder();
-			System.out.println(orderSent.toString());
+
 			Orders orderEdit = orderRepo.findById(orderId).orElseThrow(() -> new BadRequestException());
 
 			if(!orderSent.getAddress().equals(null)) {
@@ -254,7 +319,6 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 					.stream()
 					.map(item -> item.getPrice()*item.getQuantity())
 					.reduce((float)0, Float::sum)).toString();
-			System.out.println(totalPrice);
 			orderEdit.setTotal(totalPrice);
 			orderRepo.save(orderEdit);
 		}
@@ -264,7 +328,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 
 
 		List<OrderItem> itemList = orderItemRepository.getAllByOrderIdAndItemIdIn(orderId, itemIdList);
-		itemList.forEach(item -> System.out.println(item.getOrderId() + " order number, " + item.getItemName() + " item name from base"));
+//		itemList.forEach(item -> System.out.println(item.getOrderId() + " order number, " + item.getItemName() + " item name from base"));
 		
 
 		itemList.stream().forEach(orderItem -> {
@@ -272,8 +336,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 			ItemData itemEdited = list.stream()
 					.filter(item ->(item.getId()==orderItem.getItemId()) && (item.getOrderId()==orderItem.getOrderId()))
 					.findFirst().orElseThrow(() -> new NotFoundException());
-			System.out.println(orderItem.getOrderId());
-			System.out.println(itemEdited.getOrderId());
+			
 			orderItem.setQuantity(itemEdited.getQuantity());
 		});	
 		orderItemRepository.saveAll(itemList);
