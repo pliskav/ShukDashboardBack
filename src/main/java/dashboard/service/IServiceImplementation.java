@@ -45,51 +45,6 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 	@Autowired
 	Params params;
 	
-//	public PageDTO getAllOrders(Integer current_page, Integer items_on_page) {
-//		
-//		int totalOrdersCount = orderRepo.findTotalCountOrders();
-//		if(current_page==null && items_on_page==null) {
-//			
-//			current_page=params.getDefault_page_number();
-//			items_on_page = totalOrdersCount;
-//		}
-//		if(current_page == null) {
-//			
-//			current_page=params.getDefault_page_number();
-//		}
-//		if(items_on_page==null) {
-//			
-//			items_on_page=params.getDefault_items_count();
-//		}
-//		
-//		
-//				
-//		Pageable pageable = PageRequest.of(current_page, items_on_page);
-//
-//		Page<OrderBaseResponseDTO> result = orderRepo.findAllOrdersJoinUsers(pageable);
-//
-//		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(result.getContent().stream()
-//				.map(item -> convertToOrderResponseDTO(item))
-//				.collect(Collectors.toList())
-//				);
-//						
-//		Set<Integer> itemIdSet = res.stream().flatMap(order -> order.getOrderItemsDtos().stream().map(data -> data.getId())).collect(Collectors.toSet());
-//
-//		List<Item> listItems = itemRepository.findAllById(itemIdSet);
-//		
-//			
-//		return PageDTO.builder()
-//				.current_page(current_page)
-//				.items_on_page(res.size())
-//				.total_count(totalOrdersCount)
-//				.orderPage(OrderPageDTO
-//						.builder()
-//						.orders(res)
-//						.items(listItems)
-//						.build())
-//				.build();
-//	}
-
 	@Override
 	public PageDTO findOrdersByFilters(String userEmail, String userPhone, String userName, String orderDate,
 			Integer storeId, String orderItem, Integer current_page, Integer items_on_page) {
@@ -127,7 +82,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 		
 		if(userPhone != null) {
 			if(userPhone.charAt(0)==32) {
-				userPhone = "+" + userPhone.strip();
+				userPhone = "+" + userPhone.substring(1);
 			}
 		}
 		if(orderDate!=null) {
