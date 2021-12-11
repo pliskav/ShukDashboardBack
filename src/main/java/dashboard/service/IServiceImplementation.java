@@ -46,7 +46,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 	Params params;
 	
 	@Override
-	public PageDTO findOrdersByFilters(String userEmail, String userPhone, String userName, String orderDate,
+	public PageDTO findOrdersByFilters(String userEmail, String userPhone, String userName, String orderDate, String dateFrom, String dateTo,
 			Integer storeId, String orderItem, Integer current_page, Integer items_on_page) {
 		
 		int totalOrdersCount = orderRepo.findTotalCountOrders();
@@ -79,7 +79,12 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 		if(orderItem == null || orderItem == "") {
 			orderItem = null;
 		}
-		
+		if(dateFrom == null || dateFrom== "") {
+			dateFrom = null;
+		}
+		if(dateTo == null || dateTo == "") {
+			dateTo = null;
+		}
 		if(userPhone != null) {
 			if(userPhone.charAt(0)==32) {
 				userPhone = "+" + userPhone.substring(1);
@@ -89,7 +94,6 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 			orderDate = "%".concat(orderDate).concat("%");
 		}
 		if(orderItem!=null) {
-			System.out.println(orderItem);
 			orderItem = "%".concat(orderItem).concat("%");
 		}
 		
@@ -98,7 +102,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 		
 		Page<OrderBaseResponseDTO> result = null;
 		
-		if(userEmail==null && userName==null && userPhone==null && orderDate==null && storeId==null && orderItem==null) {
+		if(userEmail==null && userName==null && userPhone==null && orderDate==null && storeId==null && orderItem==null && dateFrom == null && dateTo == null) {
 			result = orderRepo.findAllOrdersJoinUsers(pageable);
 		}
 		else if(orderItem!=null){
@@ -106,20 +110,23 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 					userEmail, 
 					userPhone, 
 					userName, 
-					orderDate, 
+					orderDate,
 					storeId==null ? null : storeId.toString(), 
 					orderItem, 
+					dateFrom==null ? null : LocalDate.parse(dateFrom),
+					dateTo==null ? null : LocalDate.parse(dateTo),
 					pageable
 					);
-			System.out.println(result.getContent().size());
 		}
 		else{
 			result = orderRepo.findAllOrdersJoinUserswithFilters(
 					userEmail, 
 					userPhone, 
 					userName, 
-					orderDate, 
-					storeId==null ? null : storeId.toString(), 
+					orderDate,
+					storeId==null ? null : storeId.toString(),
+					dateFrom==null ? null : LocalDate.parse(dateFrom),
+					dateTo==null ? null : LocalDate.parse(dateTo),
 					pageable
 					);
 		}
@@ -283,7 +290,6 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 
 
 		List<OrderItem> itemList = orderItemRepository.getAllByOrderIdAndItemIdIn(orderId, itemIdList);
-//		itemList.forEach(item -> System.out.println(item.getOrderId() + " order number, " + item.getItemName() + " item name from base"));
 		
 
 		itemList.stream().forEach(orderItem -> {

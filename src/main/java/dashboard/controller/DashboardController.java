@@ -54,7 +54,7 @@ public class DashboardController {
 			@RequestParam(required=false) Integer current_page,
 			@RequestParam(required=false) Integer items_on_page
 			){
-		return serviceOrders.findOrdersByFilters(null, null, null, null, null, null, current_page, items_on_page);
+		return serviceOrders.findOrdersByFilters(null, null, null, null, null, null, null, null, current_page, items_on_page);
 	}
 	
 	@GetMapping("/orders/search")
@@ -63,6 +63,8 @@ public class DashboardController {
 		@RequestParam(required = false) String userPhone,
 		@RequestParam(required = false) String userName, 
 		@RequestParam(required = false) String orderDate,
+		@RequestParam(required = false) String dateFrom,
+		@RequestParam(required = false) String dateTo,
 		
 		@RequestParam(required = false) String orderItem,
 		@RequestParam(required = false) Integer storeId,
@@ -70,7 +72,7 @@ public class DashboardController {
 		@RequestParam(required = false) Integer current_page, 
 		@RequestParam(required = false) Integer items_on_page){
 		
-			return serviceOrders.findOrdersByFilters(userEmail, userPhone, userName, orderDate, storeId, orderItem, current_page, items_on_page);
+			return serviceOrders.findOrdersByFilters(userEmail, userPhone, userName, orderDate, dateFrom, dateTo, storeId, orderItem, current_page, items_on_page);
 		
 		
 	}
