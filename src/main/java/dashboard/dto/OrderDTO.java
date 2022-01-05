@@ -35,11 +35,11 @@ public class OrderDTO {
 	String is_scheduled;
 	String orderDate;
 	String orderTime;
+	String createdAt;
 	
 	@Override
 	public String toString() {
-		return "OrderDTO [id=" + id + ", unique_order_id=" + unique_order_id + ", orderstatus_id=" + orderstatus_id
-				+ ", total=" + total + "]";
+		return "OrderDTO [id=" + id + ", createdAt=" + createdAt + ", orderDate=" + orderDate + "]";
 	}
 	
 	

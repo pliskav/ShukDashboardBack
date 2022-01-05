@@ -31,7 +31,7 @@ public class Orders {
 	String restaurant_charge;
 	String delivery_charge;
 	String total;
-	Date created_at;
+	String created_at;
 	Date updated_at;
 //	@Column(name = "order_date")
 //	String orderDate;

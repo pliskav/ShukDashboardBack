@@ -31,6 +31,7 @@ public class OrderBaseResponseDTO {
 	String tax_amount;
 	String coupon_amount;
 	String sub_total;
+	String createdAt;
 	
 	String is_scheduled;
 	String orderDate;
@@ -61,9 +62,4 @@ public class OrderBaseResponseDTO {
 				+ ", delivery_guy_detail_id=" + delivery_guy_detail_id + ", user_is_active=" + user_is_active
 				+ ", tax_number=" + tax_number + ", goods=" + goods + "]";
 	}
-	
-	
-
-	
-
 }

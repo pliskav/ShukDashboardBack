@@ -23,7 +23,7 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 	
 	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.unique_order_id, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.tax, "
 			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
-			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.is_scheduled, o.orderDate, o.orderTime, "
+			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.created_at, o.is_scheduled, o.orderDate, o.orderTime, "
 			+ "u.userName, u.phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "
 			+ "group_concat(items.itemId, ',', items.quantity, ',', items.price, ',', items.itemName, ';') as goods) "
 			 
@@ -53,7 +53,7 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 	
 	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.unique_order_id, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.tax, "
 			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
-			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.is_scheduled, o.orderDate, o.orderTime, "
+			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.created_at, o.is_scheduled, o.orderDate, o.orderTime, "
 			+ "u.userName, u.phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "
 			+ "group_concat(items.itemId, ',', items.quantity, ',', items.price, ',', items.itemName, ';') as goods) "
 			 
@@ -80,7 +80,7 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 	
 	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.unique_order_id, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.tax, "
 			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
-			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.is_scheduled, o.orderDate, o.orderTime, "
+			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.created_at, o.is_scheduled, o.orderDate, o.orderTime, "
 			+ "u.userName, u.phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "
 			+ "group_concat(items.itemId, ',', items.quantity, ',', items.price, ',', items.itemName, ';') as goods) "
 			+ "FROM Orders o "
