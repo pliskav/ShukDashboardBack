@@ -14,5 +14,5 @@ public class Params {
 	int default_page_number;
 	@Value("${default_ItemCount}")
 	int default_items_count;
-
+public void a() {}
 }

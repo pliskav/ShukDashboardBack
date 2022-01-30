@@ -17,5 +17,7 @@ public interface IOrders {
 	public void changeOrderStatus(Integer orderId, Integer orderStatus);
 
 	public Boolean sendWhatsapp(String orderId);
+	
+	public Boolean setDefaultLanguageForUser(int userId, int languageId);
 
 }

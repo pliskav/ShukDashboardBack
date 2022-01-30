@@ -22,7 +22,8 @@ public class Orders {
 	
 	@Id
 	int id;
-	String unique_order_id;
+	@Column(name = "unique_order_id")
+	String uniqueOrderId;
 	int orderstatus_id =0;
 	int user_id=0;
 	String coupon_name;
