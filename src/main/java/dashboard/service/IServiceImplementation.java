@@ -59,6 +59,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 			Integer storeId, String orderItem, Integer current_page, Integer items_on_page) {
 		
 		int totalOrdersCount = orderRepo.findTotalCountOrders();
+		System.out.println(totalOrdersCount);
 		
 		if(current_page==null && items_on_page==null) {
 			
@@ -80,6 +81,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 			userPhone=null;
 		}
 		if (userName==null||userName=="") {
+			System.out.println("user name is null");
 			userName=null;
 		}
 		if (orderDate==null||orderDate=="") {
@@ -128,6 +130,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 					);
 		}
 		else{
+			System.out.println("userName - " + userName);
 			result = orderRepo.findAllOrdersJoinUserswithFilters(
 					userEmail, 
 					userPhone, 
@@ -138,7 +141,19 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 					dateTo==null ? null : LocalDate.parse(dateTo),
 					pageable
 					);
+			Long totalCount = orderRepo.findCountofAllOrdersJoinUsersWithAllFilters(
+					userEmail, 
+					userPhone, 
+					userName, 
+					orderDate, 
+//					storeId==null ? null : storeId.toString(), 
+					orderItem, 
+					dateFrom==null ? null : LocalDate.parse(dateFrom),
+					dateTo==null ? null : LocalDate.parse(dateTo));
+			System.out.println("total count " + totalCount);
 		}
+		
+//		result.getContent().stream().forEach(res -> System.out.println(res.getTotalCount()));
 		
 		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(result.getContent().stream()
 																		.map(this::convertToOrderResponseDTO)
