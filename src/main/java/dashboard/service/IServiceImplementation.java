@@ -49,14 +49,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 	public PageDTO findOrdersByFilters(String userEmail, String userPhone, String userName, String orderDate, String dateFrom, String dateTo,
 			Integer storeId, String orderItem, Integer current_page, Integer items_on_page) {
 		
-		int totalOrdersCount = orderRepo.findTotalCountOrders();
-		System.out.println(totalOrdersCount);
-		
-		if(current_page==null && items_on_page==null) {
 			
-			current_page=params.getDefault_page_number();
-			items_on_page = totalOrdersCount;
-		}
 		if(current_page == null) {
 			
 			current_page=params.getDefault_page_number();
@@ -72,7 +65,6 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 			userPhone=null;
 		}
 		if (userName==null||userName=="") {
-			System.out.println("user name is null");
 			userName=null;
 		}
 		if (orderDate==null||orderDate=="") {
@@ -92,13 +84,9 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 				userPhone = "+" + userPhone.substring(1);
 			}
 		}
-		if(orderDate!=null) {
-			orderDate = "%".concat(orderDate).concat("%");
-		}
 		if(orderItem!=null) {
 			orderItem = "%".concat(orderItem).concat("%");
 		}
-		
 		
 		Pageable pageable = PageRequest.of(current_page, items_on_page);
 		
@@ -115,36 +103,36 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 					orderDate,
 					storeId==null ? null : storeId.toString(), 
 					orderItem, 
-					dateFrom==null ? null : LocalDate.parse(dateFrom),
-					dateTo==null ? null : LocalDate.parse(dateTo),
+					dateFrom,
+					dateTo,
 					pageable
 					);
 		}
 		else{
-			System.out.println("userName - " + userName);
 			result = orderRepo.findAllOrdersJoinUserswithFilters(
 					userEmail, 
 					userPhone, 
 					userName, 
 					orderDate,
 					storeId==null ? null : storeId.toString(),
-					dateFrom==null ? null : LocalDate.parse(dateFrom),
-					dateTo==null ? null : LocalDate.parse(dateTo),
+					dateFrom,
+					dateTo,
 					pageable
 					);
-			Long totalCount = orderRepo.findCountofAllOrdersJoinUsersWithAllFilters(
-					userEmail, 
-					userPhone, 
-					userName, 
-					orderDate, 
-//					storeId==null ? null : storeId.toString(), 
-					orderItem, 
-					dateFrom==null ? null : LocalDate.parse(dateFrom),
-					dateTo==null ? null : LocalDate.parse(dateTo));
-			System.out.println("total count " + totalCount);
+			
 		}
 		
-//		result.getContent().stream().forEach(res -> System.out.println(res.getTotalCount()));
+		Long totalCount = orderRepo.findCountofAllOrdersJoinUsersWithAllFilters(
+				userEmail, 
+				userPhone, 
+				userName, 
+				orderDate, 
+				storeId==null ? null : storeId.toString(), 
+				orderItem, 
+				dateFrom,
+				dateTo
+				);
+		
 		
 		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(result.getContent().stream()
 																		.map(this::convertToOrderResponseDTO)
@@ -161,8 +149,8 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 	
 		return PageDTO.builder()
 				.current_page(current_page)
-				.items_on_page(res.size())
-				.total_count(totalOrdersCount)
+				.items_on_page(items_on_page > res.size() ? res.size() : items_on_page)
+				.total_count(totalCount)
 				.orderPage(OrderPageDTO
 						.builder()
 						.orders(res)
