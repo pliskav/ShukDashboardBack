@@ -15,6 +15,8 @@ import dashboard.dto.OrderBaseResponseDTO;
 @Repository
 public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 
+	Orders findByUniqueOrderId(String unique_order_id);
+	
 	List<Orders> findAll();
 	
 	Orders findById(int id);
@@ -44,7 +46,7 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 																@Param("dateTo") String to);
 
 	
-	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.unique_order_id, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.tax, "
+	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.uniqueOrderId, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.tax, "
 			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
 			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.created_at, o.is_scheduled, o.orderDate, o.orderTime, "
 			+ "u.userName, u.phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "
@@ -74,7 +76,7 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 																Pageable pageable);
 	
 	
-	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.unique_order_id, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.tax, "
+	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.uniqueOrderId, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.tax, "
 			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
 			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.created_at, o.is_scheduled, o.orderDate, o.orderTime, "
 			+ "u.userName, u.phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "
@@ -101,7 +103,7 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 																@Param("dateTo") String to,
 																Pageable pageable);
 	
-	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.unique_order_id, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.tax, "
+	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.uniqueOrderId, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.tax, "
 			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
 			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.created_at, o.is_scheduled, o.orderDate, o.orderTime, "
 			+ "u.userName, u.phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "

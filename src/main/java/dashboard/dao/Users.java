@@ -27,6 +27,7 @@ public class Users {
 	@Column(name = "is_active")
 	String userIs_active; 
 	String tax_number;
+	int default_language;
 	public int getId() {
 		return id;
 	}
@@ -147,6 +148,12 @@ public class Users {
 	}
 	public Users() {
 		super();
+	}
+	public int getDefault_language() {
+		return default_language;
+	}
+	public void setDefault_language(int default_language) {
+		this.default_language = default_language;
 	}
 	
 	

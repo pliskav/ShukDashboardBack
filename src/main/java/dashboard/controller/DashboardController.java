@@ -23,6 +23,7 @@ import dashboard.service.IService;
 import dashboard.service.ItemRepository;
 import dashboard.service.OrderItemRepository;
 import dashboard.service.OrderRepositorySql;
+import dashboard.service.TranslateReposutorySql;
 import dashboard.service.UserRepositorySql;
 
 
@@ -110,6 +111,13 @@ public class DashboardController {
 		 return true;
 		 
 	}
+	@GetMapping("/set-default-lng")
+	  public Boolean setDefaultLanguageForUser(@RequestParam int userId,@RequestParam int languageId) {
+			 serviceOrders.setDefaultLanguageForUser(userId, languageId);
+			 return true;
+			 
+		}
+	
 	
 //	@GetMapping("/items")
 //	public List<Item> getallItems(){

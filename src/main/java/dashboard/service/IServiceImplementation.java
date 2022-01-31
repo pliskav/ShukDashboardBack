@@ -4,17 +4,25 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.JsonObject;
+
 import dashboard.configuration.Params;
 import dashboard.dao.Item;
+import dashboard.dao.Language;
 import dashboard.dao.OrderItem;
 import dashboard.dao.Orders;
 import dashboard.dao.Users;
@@ -44,7 +52,8 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 	ItemRepository itemRepository;
 	@Autowired
 	Params params;
-	
+	@Autowired
+	TranslateReposutorySql translateRepositorySql;
 	@Override
 	public PageDTO findOrdersByFilters(String userEmail, String userPhone, String userName, String orderDate, String dateFrom, String dateTo,
 			Integer storeId, String orderItem, Integer current_page, Integer items_on_page) {
@@ -326,7 +335,46 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 	}
 
 	public Boolean sendWhatsapp(String orderId) {
-		WhatsappMessage.getInstance().main("972524083393","Sssssssdfdfbg");
+		
+		
+		  Orders order = orderRepo.findByUniqueOrderId(orderId); 
+		  int userId =  order.getUser_id();
+		 
+		
+		
+		Users user = userRepo.findById(userId);
+		Language language = null;
+		if(user!=null&&user.getDefault_language()!=0) {
+			
+			language	 = translateRepositorySql.findById(user.getDefault_language());
+		}else {
+			language	 = translateRepositorySql.findByIsDefault(1);
+		}
+		
+		String text = null;
+    	if(language!=null) {
+    		try {
+    			LinkedHashMap languageText =  new JSONParser(language.getData()).parseObject();
+    			
+    			
+				 text = languageText.get("whatsappMessage").toString();
+				System.out.println(text);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+		
+		if(text!=null) {
+					WhatsappMessage.getInstance().sendWhatsappMessage(user.getPhone(),text);
+		}
+		return true;
+	}
+
+	@Override
+	public Boolean setDefaultLanguageForUser(int userId, int languageId) {
+		Users user = userRepo.findById(userId);
+		
 		return true;
 	}
 
