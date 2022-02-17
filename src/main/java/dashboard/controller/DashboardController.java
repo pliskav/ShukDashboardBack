@@ -68,7 +68,7 @@ public class DashboardController {
 	@PostMapping("/payments/meshulam")
 	public String getPaymentsMeshulam() {
 		serviceOrders.createPaymentMeshulam("");
-		return null;
+		return "test";
 	}
 	
 	@GetMapping("/orders/search")
