@@ -20,6 +20,7 @@ public class Users {
 	String updated_at; 
 	String auth_token; 
 	String phone;
+	String second_phone;
 	String default_address_id; 
 	String delivery_pin;
 	String delivery_guy_detail_id; 

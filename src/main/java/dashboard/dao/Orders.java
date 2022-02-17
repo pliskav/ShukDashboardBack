@@ -28,6 +28,7 @@ public class Orders {
 	int user_id=0;
 	String coupon_name;
 	String address;
+	String location;
 	String tax;
 	String restaurant_charge;
 	String delivery_charge;

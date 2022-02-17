@@ -17,6 +17,7 @@ public class OrderDTO {
 	Integer user_id;
 	String coupon_name;
 	String address;
+	String  location;
 	String tax;
 	String restaurant_charge;
 	String delivery_charge;
@@ -36,6 +37,8 @@ public class OrderDTO {
 	String orderDate;
 	String orderTime;
 	String createdAt;
+	
+	long orderDateTimeStamp;
 	
 	@Override
 	public String toString() {

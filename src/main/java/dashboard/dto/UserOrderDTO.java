@@ -6,6 +6,7 @@ public class UserOrderDTO {
 	String name;
 	String email;
 	String phone;
+	String secondPhone;
 	String default_address_id;
     String delivery_pin;
     String delivery_guy_detail_id;
@@ -73,13 +74,22 @@ public class UserOrderDTO {
 	public void setTax_number(String tax_number) {
 		this.tax_number = tax_number;
 	}
-	public UserOrderDTO(int id, String name, String email, String phone, String default_address_id, String delivery_pin,
+	
+	
+	public String getSecondPhone() {
+		return secondPhone;
+	}
+	public void setSecondPhone(String secondPhone) {
+		this.secondPhone = secondPhone;
+	}
+	public UserOrderDTO(int id, String name, String email, String phone,String second_phone, String default_address_id, String delivery_pin,
 			String delivery_guy_detail_id, String avatar, String is_active, String tax_number) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
+		this.secondPhone = second_phone;
 		this.default_address_id = default_address_id;
 		this.delivery_pin = delivery_pin;
 		this.delivery_guy_detail_id = delivery_guy_detail_id;

@@ -1,5 +1,8 @@
 package dashboard.service;
 
+import java.util.List;
+
+import dashboard.dto.OrderBaseResponseDTO;
 import dashboard.dto.OrderResponseDTO;
 import dashboard.dto.PageDTO;
 
@@ -19,5 +22,9 @@ public interface IOrders {
 	public Boolean sendWhatsapp(String orderId);
 	
 	public Boolean setDefaultLanguageForUser(int userId, int languageId);
+	
+	public PageDTO getAllOrdersByUserId(int userId);
+	
+	public String createPaymentMeshulam(String orderId);
 
 }

@@ -1,6 +1,7 @@
 package dashboard.service;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,17 +17,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonObject;
 
 import dashboard.configuration.Params;
+import dashboard.dao.AddonCategories;
+import dashboard.dao.AddonCategoryItem;
+import dashboard.dao.Addons;
 import dashboard.dao.Item;
 import dashboard.dao.Language;
 import dashboard.dao.OrderItem;
+import dashboard.dao.OrderItemAddons;
 import dashboard.dao.Orders;
 import dashboard.dao.Users;
 import dashboard.dto.ItemBriefDTO;
+import dashboard.dto.ItemDTO;
 import dashboard.dto.ItemData;
 import dashboard.dto.OrderBaseResponseDTO;
 import dashboard.dto.OrderDTO;
@@ -54,6 +61,17 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 	Params params;
 	@Autowired
 	TranslateReposutorySql translateRepositorySql;
+	@Autowired
+	OrderItemAddonsRepository orderItemAddonsRepository;
+	@Autowired
+	AddonCategoriesRepository addonCategoriesRepository;
+	@Autowired
+	AddonCategoryItemRepository addonCategoryItemRepository;
+	@Autowired
+	AddonsRepository addonsRepository;
+	
+	
+	
 	@Override
 	public PageDTO findOrdersByFilters(String userEmail, String userPhone, String userName, String orderDate, String dateFrom, String dateTo,
 			Integer storeId, String orderItem, Integer current_page, Integer items_on_page) {
@@ -167,15 +185,52 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 						.build())
 				.build();
 	}
+	@Override
+	public PageDTO getAllOrdersByUserId(int userId) {
+		List<OrderBaseResponseDTO> results =orderRepo.findAllOrdersJoinUserId(userId);
+		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>();
 
-	private OrderResponseDTO convertToOrderResponseDTO(OrderBaseResponseDTO item) {
-		OrderDTO order = new OrderDTO(item.getId(), item.getUnique_order_id(), item.getOrderstatus_id(), item.getUser_id(), item.getCoupon_name(), item.getAddress(), 
-				item.getTax(), item.getRestaurant_charge(), item.getDelivery_charge(), item.getTotal(), item.getPayment_mode(), item.getOrder_comment(), item.getRestaurant_id(), 
-				item.getTransaction_id(), item.getDelivery_type(), item.getPayable(), item.getWallet_amount(), item.getTip_amount(), item.getTax_amount(), 
-				item.getCoupon_amount(), item.getSub_total(), item.getIs_scheduled(), item.getOrderDate(), item.getOrderTime(), item.getCreatedAt());
+		for(OrderBaseResponseDTO order : results) {
+			res.add(convertToOrderResponseDTO(order));
+		}
+		Set<Integer> itemIdSet = res
+				.stream()
+				.flatMap(order -> order.getOrderItemsDtos()
+										.stream()
+										.map(data -> data.getId()))
+				.collect(Collectors.toSet());
+
+List<Item> listItems = itemRepository.findAllById(itemIdSet);
+		
+		return PageDTO.builder()
+				.orderPage(OrderPageDTO
+						.builder()
+						.orders(res)
+						.items(listItems)
+						.build())
+				.build();
+	}
+
+	private OrderResponseDTO convertToOrderResponseDTO(OrderBaseResponseDTO item){
+		
+		 
+		
+		OrderDTO order = null;
+		try {
+			order = new OrderDTO(item.getId(), item.getUnique_order_id(), item.getOrderstatus_id(), item.getUser_id(), item.getCoupon_name(), item.getAddress(), item.getLocation(), 
+					item.getTax(), item.getRestaurant_charge(), item.getDelivery_charge(), item.getTotal(), item.getPayment_mode(), item.getOrder_comment(), item.getRestaurant_id(), 
+					item.getTransaction_id(), item.getDelivery_type(), item.getPayable(), item.getWallet_amount(), item.getTip_amount(), item.getTax_amount(), 
+					item.getCoupon_amount(), item.getSub_total(), item.getIs_scheduled(), item.getOrderDate(), item.getOrderTime(), item.getCreatedAt(),
+					new SimpleDateFormat("yyyy-MM-dd").parse(new JSONParser(item.getOrderDate()).parseObject().get("date").toString()).getTime()
+					
+					);
+		} catch (java.text.ParseException | ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(order);
 		
-		UserOrderDTO user = new UserOrderDTO(item.getUser_id(), item.getUserName(), item.getEmail(), item.getPhone(), item.getDefault_address_id(), 
+		UserOrderDTO user = new UserOrderDTO(item.getUser_id(), item.getUserName(), item.getEmail(), item.getPhone(), item.getSecond_phone(), item.getDefault_address_id(), 
 				item.getDelivery_pin(), item.getDelivery_guy_detail_id(), item.getAvatar(), item.getUser_is_active(), item.getTax_number());
 		
 		String goodString = item.getGoods();
@@ -184,9 +239,20 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 		}
 		String[] strArray = goodString.split(";,");
 		List<String> arrItems = Arrays.asList(strArray);
+		
 		List<ItemData> goodsList = arrItems.stream().map(arrayString -> arrayString.split(","))
 		.map(array -> {
-			return new ItemData(Integer.parseInt(array[0]), Integer.parseInt(array[1]), item.getId(), Float.parseFloat(array[2]), array[3]);
+			OrderItemAddons orderItemAddons = null;
+					if(Float.parseFloat(array[2])==0) {
+						orderItemAddons = orderItemAddonsRepository.findByOrderItemId(Integer.parseInt(array[4]));
+					}
+			return new ItemData(Integer.parseInt(array[0]),
+								orderItemAddons!=null?orderItemAddons.getAddonName():Integer.parseInt(array[1]),
+								item.getId(), 
+								orderItemAddons!=null?orderItemAddons.getAddonPrice():Float.parseFloat(array[2]),
+								array[3],
+								Integer.parseInt(array[4]),
+								orderItemAddons==null?0:1);
 		})
 		.collect(Collectors.toList());
 		
@@ -377,10 +443,29 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 		
 		return true;
 	}
+	@Override
+	public String createPaymentMeshulam(String orderId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ItemDTO getItemById(int id) {
+		List<Addons> addonsList = null;
+		AddonCategoryItem addonCategoriesItem = null;
+		AddonCategories addonCategories  = null;
+		Item item  = itemRepository.findById(id);
+		if(item.getPrice()==0) {
+		addonCategoriesItem = addonCategoryItemRepository.findByItemId(item.getId());
+		addonCategories = addonCategoriesRepository.findById(addonCategoriesItem.getAddonCategoryId());
+		addonsList = addonsRepository.findAllByAddonCategoryId(addonCategoriesItem.getAddonCategoryId());
+		}
+		ItemDTO itemDTO =new ItemDTO(item,addonsList,addonCategories,addonCategoriesItem);
+		return itemDTO;
+	}
+
 
 
 	
-
 
 
 

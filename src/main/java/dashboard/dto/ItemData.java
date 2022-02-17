@@ -17,6 +17,8 @@ public class ItemData {
 	Integer orderId;
 	float price;
 	String name;
+	int orderItemId;
+	int type;      //0-regular,1-Addon
 	
 	@Override
 	public String toString() {

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dashboard.configuration.Params;
 import dashboard.dto.ItemBriefDTO;
+import dashboard.dto.ItemDTO;
+import dashboard.dto.OrderBaseResponseDTO;
 import dashboard.dto.OrderResponseDTO;
 import dashboard.dto.PageDTO;
 import dashboard.service.IOrderItems;
@@ -58,6 +60,17 @@ public class DashboardController {
 		return serviceOrders.findOrdersByFilters(null, null, null, null, null, null, null, null, current_page, items_on_page);
 	}
 	
+	@GetMapping("/orders/user")
+	public PageDTO getAllOrdersByUserId(@RequestParam(required=true) Integer userId){
+		return serviceOrders.getAllOrdersByUserId(userId);
+	}
+	
+	@PostMapping("/payments/meshulam")
+	public String getPaymentsMeshulam() {
+		serviceOrders.createPaymentMeshulam("");
+		return null;
+	}
+	
 	@GetMapping("/orders/search")
 	public PageDTO getOrdersbyFilters(
 		@RequestParam(required = false) String userEmail,
@@ -99,12 +112,13 @@ public class DashboardController {
 	public List<ItemBriefDTO> getAllItems(){
 		return itemsService.getAllBriefDTOs();
 	}
-//	@PostMapping("/send-whatsapp")
-//	public Boolean sendWhatsapp(@RequestBody String orderId) {
-//		 serviceOrders.sendWhatsapp(orderId);
-//		 return true;
-//		 
-//	}
+	
+@GetMapping("/items/addon")
+public ItemDTO getItemById(@RequestParam(required = true) int id) {
+	return itemsService.getItemById(id);
+	
+}
+
 	@PostMapping("/send-whatsapp")
   public Boolean sendWhatsapp(@RequestBody String orderId) {
 		 serviceOrders.sendWhatsapp(orderId);

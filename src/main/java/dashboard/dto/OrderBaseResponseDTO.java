@@ -16,6 +16,7 @@ public class OrderBaseResponseDTO {
 	int user_id;
 	String coupon_name;
 	String address;
+	String location;
 	String tax;
 	String restaurant_charge;
 	String delivery_charge;
@@ -39,6 +40,7 @@ public class OrderBaseResponseDTO {
 	
 	String userName;
 	String phone;
+	String second_phone;
 	String email;
 	String avatar;
 	String default_address_id;
@@ -46,7 +48,10 @@ public class OrderBaseResponseDTO {
 	String delivery_guy_detail_id;
 	String user_is_active;
 	String tax_number;
+	//int orderItemId;
 	String goods;
+
+	
 	@Override
 	public String toString() {
 		return "OrderBaseResponseDTO [id=" + id + ", unique_order_id=" + unique_order_id + ", orderstatus_id="
@@ -56,10 +61,11 @@ public class OrderBaseResponseDTO {
 				+ ", restaurant_id=" + restaurant_id + ", transaction_id=" + transaction_id + ", delivery_type="
 				+ delivery_type + ", payable=" + payable + ", wallet_amount=" + wallet_amount + ", tip_amount="
 				+ tip_amount + ", tax_amount=" + tax_amount + ", coupon_amount=" + coupon_amount + ", sub_total="
-				+ sub_total + ", is_scheduled=" + is_scheduled + ", orderDate=" + orderDate + ", orderTime=" + orderTime
-				+ ", userName=" + userName + ", phone=" + phone + ", email=" + email + ", avatar=" + avatar
-				+ ", default_address_id=" + default_address_id + ", delivery_pin=" + delivery_pin
-				+ ", delivery_guy_detail_id=" + delivery_guy_detail_id + ", user_is_active=" + user_is_active
-				+ ", tax_number=" + tax_number + ", goods=" + goods + "]";
+				+ sub_total + ", createdAt=" + createdAt + ", is_scheduled=" + is_scheduled + ", orderDate=" + orderDate
+				+ ", orderTime=" + orderTime + ", userName=" + userName + ", phone=" + phone + ", second_phone="
+				+ second_phone + ", email=" + email + ", avatar=" + avatar + ", default_address_id="
+				+ default_address_id + ", delivery_pin=" + delivery_pin + ", delivery_guy_detail_id="
+				+ delivery_guy_detail_id + ", user_is_active=" + user_is_active + ", tax_number=" + tax_number
+				+ ", goods=" + goods + "]";
 	}
 }
