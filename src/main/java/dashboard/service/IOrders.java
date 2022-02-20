@@ -3,6 +3,7 @@ package dashboard.service;
 import java.util.List;
 
 import dashboard.dto.OrderBaseResponseDTO;
+import dashboard.dto.OrderDTO;
 import dashboard.dto.OrderResponseDTO;
 import dashboard.dto.PageDTO;
 
@@ -15,7 +16,7 @@ public interface IOrders {
 			String dateFrom, String dateTo, Integer storeId, String orderItem, Integer current_page, Integer items_on_page);
 	
 
-	public void editOrder(Integer orderId, OrderResponseDTO orderData);
+	public OrderDTO editOrder(Integer orderId, OrderResponseDTO orderData);
 	
 	public void changeOrderStatus(Integer orderId, Integer orderStatus);
 

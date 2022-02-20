@@ -282,13 +282,13 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 
 
 	@Override
-	public void editOrder(Integer orderId, OrderResponseDTO orderData) {
+	public OrderDTO editOrder(Integer orderId, OrderResponseDTO orderData) {
 		if (orderData == null || orderId == null) {
 			throw new BadRequestException();
 		}
-		
+		OrderDTO orderSent = null;
 		if(orderData.getOrder()!=null) {
-			OrderDTO orderSent = orderData.getOrder();
+			 orderSent = orderData.getOrder();
 
 			Orders orderEdit = orderRepo.findById(orderId).orElseThrow(() -> new BadRequestException());
 
@@ -358,7 +358,7 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 		
 			String totalPrice = (orderData.getOrderItemsDtos()
 					.stream()
-					.map(item -> item.getPrice()*item.getQuantity())
+					.map(item ->  item.getType()==0? item.getPrice()*item.getQuantity():item.getPrice())
 					.reduce((float)0, Float::sum)).toString();
 			orderEdit.setTotal(totalPrice);
 			orderRepo.save(orderEdit);
@@ -376,10 +376,17 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 			ItemData itemEdited = list.stream()
 					.filter(item ->(item.getId()==orderItem.getItemId()) && (item.getOrderId()==orderItem.getOrderId()))
 					.findFirst().orElseThrow(() -> new NotFoundException());
-			
+			OrderItemAddons orderItemAddons = orderItemAddonsRepository.findByOrderItemId(itemEdited.getOrderItemId());
+			if(orderItemAddons!=null) {
+				orderItemAddons.setAddonName(itemEdited.getQuantity());
+				orderItemAddons.setAddonPrice(itemEdited.getPrice());
+			}
 			orderItem.setQuantity(itemEdited.getQuantity());
 		});	
+		
+	
 		orderItemRepository.saveAll(itemList);
+		return orderSent;
 	}
 
 

@@ -17,6 +17,7 @@ import dashboard.configuration.Params;
 import dashboard.dto.ItemBriefDTO;
 import dashboard.dto.ItemDTO;
 import dashboard.dto.OrderBaseResponseDTO;
+import dashboard.dto.OrderDTO;
 import dashboard.dto.OrderResponseDTO;
 import dashboard.dto.PageDTO;
 import dashboard.service.IOrderItems;
@@ -93,11 +94,11 @@ public class DashboardController {
 	
 	
 	@PutMapping("/order/{orderId}")
-	public void editOrder(
+	public OrderDTO editOrder(
 			@RequestBody OrderResponseDTO order,
 			@PathVariable Integer orderId
 			) {
-			serviceOrders.editOrder(orderId, order);
+		return	serviceOrders.editOrder(orderId, order);
 	}
 	
 	@PutMapping("/order/{orderId}/status")

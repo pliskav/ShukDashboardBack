@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class ItemData {
-	Integer id;
+	Integer id;  //itemId table items
 	Integer quantity;
 	Integer orderId;
 	float price;
