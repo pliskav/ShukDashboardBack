@@ -81,7 +81,7 @@ public class DashboardController {
 		@RequestParam(required = false) String dateFrom,
 		@RequestParam(required = false) String dateTo,
 		
-		@RequestParam(required = false) String orderItem,
+		@RequestParam(required = false) List<String> orderItem,
 		@RequestParam(required = false) Integer storeId,
 			
 		@RequestParam(required = false) Integer current_page, 
