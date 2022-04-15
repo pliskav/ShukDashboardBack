@@ -117,26 +117,50 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 		
 		Pageable pageable = PageRequest.of(current_page, items_on_page);
 		
-		Page<OrderBaseResponseDTO> result = null;
-		List<Integer> ids = new ArrayList<Integer>();
-		ids.add(108);
-		ids.add(105);
-		ids.add(106);
+		Page<OrderBaseResponseDTO> result = orderRepo.findAllOrdersJoinUsersWithAllFilters(
+				orderItem,
+				userEmail, 
+				userPhone, 
+				userName, 
+				orderDate,
+				storeId==null ? null : storeId.toString(), 
+				dateFrom,
+				dateTo,
+				pageable
+				);
 		
-		result = orderRepo.testFindAllOrdersJoinUsersWithAllFilters(orderItem, pageable);
+//		result = orderRepo.testFindAllOrdersJoinUsersWithAllFilters(
+//				orderItem,
+//				userEmail, 
+//				userPhone, 
+//				userName, 
+//				orderDate,
+//				storeId==null ? null : storeId.toString(), 
+//				dateFrom,
+//				dateTo,
+//				pageable);
 		
 //		if(userEmail==null && userName==null && userPhone==null && orderDate==null && storeId==null && orderItem==null && dateFrom == null && dateTo == null) {
-//			result = orderRepo.findAllOrdersJoinUsers(pageable);
-//		}
-//		else if(orderItem!=null){
-//			prepareStringArrayToStringForFilter(orderItem);
 //			result = orderRepo.findAllOrdersJoinUsersWithAllFilters(
+//					orderItem,
 //					userEmail, 
 //					userPhone, 
 //					userName, 
 //					orderDate,
 //					storeId==null ? null : storeId.toString(), 
-//					prepareStringArrayToStringForFilter(orderItem), 
+//					dateFrom,
+//					dateTo,
+//					pageable
+//					);
+//		}
+//		else if(orderItem!=null){
+//			result = orderRepo.findAllOrdersJoinUsersWithAllFilters(
+//					orderItem,
+//					userEmail, 
+//					userPhone, 
+//					userName, 
+//					orderDate,
+//					storeId==null ? null : storeId.toString(), 
 //					dateFrom,
 //					dateTo,
 //					pageable
@@ -144,12 +168,13 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 //		}
 //		else{
 //			
-//			result = orderRepo.findAllOrdersJoinUserswithFilters(
+//			result = orderRepo.findAllOrdersJoinUsersWithAllFilters(
+//					orderItem,
 //					userEmail, 
 //					userPhone, 
 //					userName, 
 //					orderDate,
-//					storeId==null ? null : storeId.toString(),
+//					storeId==null ? null : storeId.toString(), 
 //					dateFrom,
 //					dateTo,
 //					pageable
@@ -158,12 +183,12 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 //		}
 		
 		Long totalCount = orderRepo.findCountofAllOrdersJoinUsersWithAllFilters(
+				orderItem,
 				userEmail, 
 				userPhone, 
 				userName, 
-				orderDate, 
+				orderDate,
 				storeId==null ? null : storeId.toString(), 
-//				prepareStringArrayToStringForFilter(orderItem),  
 				dateFrom,
 				dateTo
 				);
@@ -172,6 +197,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(result.getContent().stream()
 																		.map(this::convertToOrderResponseDTO)
 																		.collect(Collectors.toList()));
+		System.out.println(res.size());
 		
 		Set<Integer> itemIdSet = res
 									.stream()

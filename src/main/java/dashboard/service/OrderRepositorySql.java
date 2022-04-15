@@ -33,17 +33,20 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 			+ "and (:date is null or date(json_unquote(json_extract(o.orderDate, '$.date'))) = date(:date)) "
 			+ "and (:restaurantId is null or o.restaurant_id = :restaurantId) "
 			+ "and (:dateFrom is null or date(json_unquote(json_extract(o.orderDate, '$.date'))) between date(:dateFrom) and date(:dateTo))"
+			+ "and :itemName is null or lower(items.itemName) in (:itemName) "
 //			+ "and (:orderGoods is null or lower(group_concat(items.itemName)) like lower(:orderGoods)) "
 			+ "order by o.created_at desc",
 			nativeQuery = false)
-	Long findCountofAllOrdersJoinUsersWithAllFilters(@Param(value = "email") String email, 
-																@Param("phone") String phone,
-																@Param("username") String userName,
-																@Param("date") String orderDate,
-																@Param("restaurantId") String restaurantId,
-//																@Param("orderGoods") String goods,
-																@Param("dateFrom") String from,
-																@Param("dateTo") String to);
+	Long findCountofAllOrdersJoinUsersWithAllFilters(
+														@Param(value = "itemName") List<String> itemName,
+														@Param(value = "email") String email,
+														@Param("phone") String phone,
+														@Param("username") String userName,
+														@Param("date") String orderDate,
+														@Param("restaurantId") String restaurantId,
+														@Param("dateFrom") String from,
+														@Param("dateTo") String to
+														);
 
 	
 	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.uniqueOrderId, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.location, o.tax, "
@@ -58,23 +61,26 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 			//+ "right join OrderItemAddons addon on  (items.price=0 ) "
 			
 			//+ "(NOT(addon.addonName==null) then (items.quantity) else (addon.addonName)  end)   as total_items_addon"
+			
 			+ "where (:email is null or u.email=:email) "
 			+ "and (:phone is null or u.phone = :phone) "
 			+ "and (:username is null or u.userName = :username) "
 			+ "and (:date is null or date(json_unquote(json_extract(o.orderDate, '$.date'))) = date(:date)) "
 			+ "and (:restaurantId is null or o.restaurant_id = :restaurantId) "
 			+ "and (:dateFrom is null or date(json_unquote(json_extract(o.orderDate, '$.date'))) between date(:dateFrom) and date(:dateTo))"
+			+ "and :itemName is null or lower(items.itemName) in (:itemName) "
 			+ "group by o.id "
-			+ "having lower(group_concat(items.itemId, ',', items.quantity, ',', items.price, ',', items.itemName, ';')) like lower(:orderGoods) "
+//			+ "having lower(group_concat(items.itemId, ',', items.quantity, ',', items.price, ',', items.itemName, ';')) like lower(:orderGoods) "
 //			+ "having lower(group_concat(items.itemName)) in lower (:orderGoods) "
 			+ "order by o.created_at desc",
 			nativeQuery = false)
-	Page<OrderBaseResponseDTO> findAllOrdersJoinUsersWithAllFilters(@Param(value = "email") String email, 
+	Page<OrderBaseResponseDTO> findAllOrdersJoinUsersWithAllFilters(
+																@Param(value = "itemName") List<String> itemName,
+																@Param(value = "email") String email,
 																@Param("phone") String phone,
 																@Param("username") String userName,
 																@Param("date") String orderDate,
 																@Param("restaurantId") String restaurantId,
-																@Param("orderGoods") List<String> goods,
 																@Param("dateFrom") String from,
 																@Param("dateTo") String to,
 																Pageable pageable);
@@ -88,6 +94,13 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 			+ "FROM Orders o "
 			+ "inner join Users u on o.user_id=u.id "
 			+ "inner join OrderItem items on o.id=items.orderId "
+			+ "where (:email is null or u.email=:email) "
+			+ "and (:phone is null or u.phone = :phone) "
+			+ "and (:username is null or u.userName = :username) "
+			+ "and (:date is null or date(json_unquote(json_extract(o.orderDate, '$.date'))) = date(:date)) "
+			+ "and (:restaurantId is null or o.restaurant_id = :restaurantId) "
+			+ "and (:dateFrom is null or date(json_unquote(json_extract(o.orderDate, '$.date'))) between date(:dateFrom) and date(:dateTo))"
+			+ "and :itemName is null or lower(items.itemName) in (:itemName) "
 			//+ "right join OrderItemAddons addon on  (items.price=0 ) "
 			
 			//+ "(NOT(addon.addonName==null) then (items.quantity) else (addon.addonName)  end)   as total_items_addon"
@@ -95,17 +108,18 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 //			
 			+ "group by o.id "
 //			+ "having lower(group_concat(items.itemId, ',', items.quantity, ',', items.price, ',', items.itemName, ';')) like lower(:orderGoods) "
-			+ "having lower(group_concat(items.itemName)) in :itemName "
+//			+ "having lower(group_concat(items.itemName)) in (:itemName) "
 			+ "order by o.created_at desc",
 			nativeQuery = false)
-	Page<OrderBaseResponseDTO> testFindAllOrdersJoinUsersWithAllFilters(@Param(value = "itemName") List<String> itemName, 
-//																@Param("phone") String phone,
-//																@Param("username") String userName,
-//																@Param("date") String orderDate,
-//																@Param("restaurantId") String restaurantId,
-//																@Param("orderGoods") List<String> goods,
-//																@Param("dateFrom") String from,
-//																@Param("dateTo") String to,
+	Page<OrderBaseResponseDTO> testFindAllOrdersJoinUsersWithAllFilters(
+																@Param(value = "itemName") List<String> itemName,
+																@Param(value = "email") String email,
+																@Param("phone") String phone,
+																@Param("username") String userName,
+																@Param("date") String orderDate,
+																@Param("restaurantId") String restaurantId,
+																@Param("dateFrom") String from,
+																@Param("dateTo") String to,
 																Pageable pageable);
 	
 	
