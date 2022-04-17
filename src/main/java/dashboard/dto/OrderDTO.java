@@ -40,6 +40,8 @@ public class OrderDTO {
 	
 	long orderDateTimeStamp;
 	
+	String storeName;
+	
 	@Override
 	public String toString() {
 		return "OrderDTO [id=" + id + ", createdAt=" + createdAt + ", orderDate=" + orderDate + "]";

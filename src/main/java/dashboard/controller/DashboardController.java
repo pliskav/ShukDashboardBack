@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dashboard.configuration.Params;
+import dashboard.dao.Item;
+import dashboard.dao.Store;
 import dashboard.dto.ItemBriefDTO;
 import dashboard.dto.ItemDTO;
 import dashboard.dto.OrderBaseResponseDTO;
@@ -23,6 +25,7 @@ import dashboard.dto.PageDTO;
 import dashboard.service.IOrderItems;
 import dashboard.service.IOrders;
 import dashboard.service.IService;
+import dashboard.service.IStore;
 import dashboard.service.ItemRepository;
 import dashboard.service.OrderItemRepository;
 import dashboard.service.OrderRepositorySql;
@@ -49,6 +52,9 @@ public class DashboardController {
 	ItemRepository itemRepo;
 	@Autowired
 	OrderItemRepository orderItemRepo;
+	@Autowired
+	IStore istore;
+	
 	@Autowired
 	Params params;
 	
@@ -112,6 +118,11 @@ public class DashboardController {
 	@GetMapping("/items")
 	public List<ItemBriefDTO> getAllItems(){
 		return itemsService.getAllBriefDTOs();
+	}
+	
+	@PostMapping("/store")
+	public List<Store> getAllStoresById(@RequestBody(required = true) List<Integer> ids){
+		return istore.getAllStoreById(ids);
 	}
 	
 @GetMapping("/items/addon")

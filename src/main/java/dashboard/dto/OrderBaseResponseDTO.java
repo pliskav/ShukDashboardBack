@@ -33,12 +33,10 @@ public class OrderBaseResponseDTO {
 	String coupon_amount;
 	String sub_total;
 	String createdAt;
-	
 	String is_scheduled;
 	String orderDate;
 	String orderTime;
-	
-	String userName;
+		String userName;
 	String phone;
 	String second_phone;
 	String email;
@@ -48,8 +46,10 @@ public class OrderBaseResponseDTO {
 	String delivery_guy_detail_id;
 	String user_is_active;
 	String tax_number;
-	//int orderItemId;
+	String store_name;
 	String goods;
+	
+	
 
 	
 	@Override

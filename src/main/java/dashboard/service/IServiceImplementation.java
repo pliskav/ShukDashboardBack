@@ -31,6 +31,7 @@ import dashboard.dao.Language;
 import dashboard.dao.OrderItem;
 import dashboard.dao.OrderItemAddons;
 import dashboard.dao.Orders;
+import dashboard.dao.Store;
 import dashboard.dao.Users;
 import dashboard.dto.ItemBriefDTO;
 import dashboard.dto.ItemDTO;
@@ -46,7 +47,7 @@ import dashboard.exceptions.NotFoundException;
 import utils.WhatsappMessage;
 
 @Service
-public class IServiceImplementation implements IService, IOrders, IOrderItems{
+public class IServiceImplementation implements IService, IOrders, IOrderItems,IStore{
 
 
 	@Autowired
@@ -69,7 +70,8 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems{
 	AddonCategoryItemRepository addonCategoryItemRepository;
 	@Autowired
 	AddonsRepository addonsRepository;
-	
+	@Autowired
+	StoreRepository storeRepository;
 	
 	
 	@Override
@@ -221,7 +223,7 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 					item.getTax(), item.getRestaurant_charge(), item.getDelivery_charge(), item.getTotal(), item.getPayment_mode(), item.getOrder_comment(), item.getRestaurant_id(), 
 					item.getTransaction_id(), item.getDelivery_type(), item.getPayable(), item.getWallet_amount(), item.getTip_amount(), item.getTax_amount(), 
 					item.getCoupon_amount(), item.getSub_total(), item.getIs_scheduled(), item.getOrderDate(), item.getOrderTime(), item.getCreatedAt(),
-					new SimpleDateFormat("yyyy-MM-dd").parse(new JSONParser(item.getOrderDate()).parseObject().get("date").toString()).getTime()
+					new SimpleDateFormat("yyyy-MM-dd").parse(new JSONParser(item.getOrderDate()).parseObject().get("date").toString()).getTime(),item.getStore_name()
 					
 					);
 		} catch (java.text.ParseException | ParseException e) {
@@ -468,6 +470,11 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 		}
 		ItemDTO itemDTO =new ItemDTO(item,addonsList,addonCategories,addonCategoriesItem);
 		return itemDTO;
+	}
+	@Override
+	public List<Store> getAllStoreById(List<Integer> ids) {
+		List<Store> stores = storeRepository.findAllById(ids);
+		return stores;
 	}
 
 
