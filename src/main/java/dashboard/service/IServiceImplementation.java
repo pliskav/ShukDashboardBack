@@ -76,7 +76,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 	
 	@Override
 	public PageDTO findOrdersByFilters(String userEmail, String userPhone, String userName, String orderDate, String dateFrom, String dateTo,
-			Integer storeId, String orderItem, Integer current_page, Integer items_on_page) {
+			Integer storeId, List<String> orderItem, Integer current_page, Integer items_on_page) {
 		
 			
 		if(current_page == null) {
@@ -99,7 +99,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 		if (orderDate==null||orderDate=="") {
 			orderDate=null;
 		}
-		if(orderItem == null || orderItem == "") {
+		if(orderItem == null || orderItem.size() == 0) {
 			orderItem = null;
 		}
 		if(dateFrom == null || dateFrom== "") {
@@ -113,51 +113,84 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 				userPhone = "+" + userPhone.substring(1);
 			}
 		}
-		if(orderItem!=null) {
-			orderItem = "%".concat(orderItem).concat("%");
-		}
+//		if(orderItem!=null) {
+//			orderItem = "%".concat(orderItem).concat("%");
+//		}
 		
 		Pageable pageable = PageRequest.of(current_page, items_on_page);
 		
-		Page<OrderBaseResponseDTO> result = null;
-		
-		if(userEmail==null && userName==null && userPhone==null && orderDate==null && storeId==null && orderItem==null && dateFrom == null && dateTo == null) {
-			result = orderRepo.findAllOrdersJoinUsers(pageable);
-		}
-		else if(orderItem!=null){
-			result = orderRepo.findAllOrdersJoinUsersWithAllFilters(
-					userEmail, 
-					userPhone, 
-					userName, 
-					orderDate,
-					storeId==null ? null : storeId.toString(), 
-					orderItem, 
-					dateFrom,
-					dateTo,
-					pageable
-					);
-		}
-		else{
-			result = orderRepo.findAllOrdersJoinUserswithFilters(
-					userEmail, 
-					userPhone, 
-					userName, 
-					orderDate,
-					storeId==null ? null : storeId.toString(),
-					dateFrom,
-					dateTo,
-					pageable
-					);
-			
-		}
-		
-		Long totalCount = orderRepo.findCountofAllOrdersJoinUsersWithAllFilters(
+		Page<OrderBaseResponseDTO> result = orderRepo.findAllOrdersJoinUsersWithAllFilters(
+				orderItem,
 				userEmail, 
 				userPhone, 
 				userName, 
-				orderDate, 
+				orderDate,
 				storeId==null ? null : storeId.toString(), 
-				orderItem, 
+				dateFrom,
+				dateTo,
+				pageable
+				);
+		
+//		result = orderRepo.testFindAllOrdersJoinUsersWithAllFilters(
+//				orderItem,
+//				userEmail, 
+//				userPhone, 
+//				userName, 
+//				orderDate,
+//				storeId==null ? null : storeId.toString(), 
+//				dateFrom,
+//				dateTo,
+//				pageable);
+		
+//		if(userEmail==null && userName==null && userPhone==null && orderDate==null && storeId==null && orderItem==null && dateFrom == null && dateTo == null) {
+//			result = orderRepo.findAllOrdersJoinUsersWithAllFilters(
+//					orderItem,
+//					userEmail, 
+//					userPhone, 
+//					userName, 
+//					orderDate,
+//					storeId==null ? null : storeId.toString(), 
+//					dateFrom,
+//					dateTo,
+//					pageable
+//					);
+//		}
+//		else if(orderItem!=null){
+//			result = orderRepo.findAllOrdersJoinUsersWithAllFilters(
+//					orderItem,
+//					userEmail, 
+//					userPhone, 
+//					userName, 
+//					orderDate,
+//					storeId==null ? null : storeId.toString(), 
+//					dateFrom,
+//					dateTo,
+//					pageable
+//					);
+//		}
+//		else{
+//			
+//			result = orderRepo.findAllOrdersJoinUsersWithAllFilters(
+//					orderItem,
+//					userEmail, 
+//					userPhone, 
+//					userName, 
+//					orderDate,
+//					storeId==null ? null : storeId.toString(), 
+//					dateFrom,
+//					dateTo,
+//					pageable
+//					);
+//			
+//		}
+		
+		Long totalCount = orderRepo.findCountofAllOrdersJoinUsersWithAllFilters(
+				orderItem,
+				userEmail, 
+				userPhone, 
+				userName, 
+				orderDate,
+				storeId==null ? null : storeId.toString(), 
 				dateFrom,
 				dateTo
 				);
@@ -166,6 +199,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(result.getContent().stream()
 																		.map(this::convertToOrderResponseDTO)
 																		.collect(Collectors.toList()));
+		System.out.println(res.size());
 		
 		Set<Integer> itemIdSet = res
 									.stream()
@@ -187,6 +221,20 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 						.build())
 				.build();
 	}
+	private List<String> prepareStringArrayToStringForFilter(String[] orderItem) {
+//		List<String> result = null;
+		
+//		[z,b,c,v]
+//		i=0: z + |
+//		i=1: z + | + b + |
+//		i=2: z + | + b + | + c + |
+//		i=3: z + | + b + | + c + |
+//		i=4: z + | + b + | + c + | + v
+		
+		return Arrays.asList(orderItem);
+	}
+	
+	
 	@Override
 	public PageDTO getAllOrdersByUserId(int userId) {
 		List<OrderBaseResponseDTO> results =orderRepo.findAllOrdersJoinUserId(userId);
@@ -230,9 +278,9 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(order);
+		System.out.println(order.getId());
 		
-		UserOrderDTO user = new UserOrderDTO(item.getUser_id(), item.getUserName(), item.getEmail(), item.getPhone(), item.getSecond_phone(), item.getDefault_address_id(), 
+		UserOrderDTO user = new UserOrderDTO(item.getUser_id(), item.getUserName(), item.getEmail(), item.getPhone(), item.getDefault_address_id(), 
 				item.getDelivery_pin(), item.getDelivery_guy_detail_id(), item.getAvatar(), item.getUser_is_active(), item.getTax_number());
 		
 		String goodString = item.getGoods();

@@ -38,7 +38,7 @@ public class OrderBaseResponseDTO {
 	String orderTime;
 		String userName;
 	String phone;
-	String second_phone;
+//	String second_phone;
 	String email;
 	String avatar;
 	String default_address_id;
@@ -62,8 +62,7 @@ public class OrderBaseResponseDTO {
 				+ delivery_type + ", payable=" + payable + ", wallet_amount=" + wallet_amount + ", tip_amount="
 				+ tip_amount + ", tax_amount=" + tax_amount + ", coupon_amount=" + coupon_amount + ", sub_total="
 				+ sub_total + ", createdAt=" + createdAt + ", is_scheduled=" + is_scheduled + ", orderDate=" + orderDate
-				+ ", orderTime=" + orderTime + ", userName=" + userName + ", phone=" + phone + ", second_phone="
-				+ second_phone + ", email=" + email + ", avatar=" + avatar + ", default_address_id="
+				+ ", orderTime=" + orderTime + ", userName=" + userName + ", phone=" + phone + ", email=" + email + ", avatar=" + avatar + ", default_address_id="
 				+ default_address_id + ", delivery_pin=" + delivery_pin + ", delivery_guy_detail_id="
 				+ delivery_guy_detail_id + ", user_is_active=" + user_is_active + ", tax_number=" + tax_number
 				+ ", goods=" + goods + "]";
