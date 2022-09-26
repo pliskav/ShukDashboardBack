@@ -116,8 +116,19 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 //		if(orderItem!=null) {
 //			orderItem = "%".concat(orderItem).concat("%");
 //		}
-		
+		if(current_page!=null) {System.out.println("current page + " + current_page);}
 		Pageable pageable = PageRequest.of(current_page, items_on_page);
+		List<Integer>responeIds = orderRepo.findAllOrderIdsWithAllFilters(
+				orderItem,
+				userEmail, 
+				userPhone, 
+				userName, 
+				orderDate,
+				storeId==null ? null : storeId.toString(), 
+				dateFrom,
+				dateTo,
+				pageable);
+		responeIds.stream().forEach(id -> System.out.println("orderid - " + id));
 		
 		Page<OrderBaseResponseDTO> result = orderRepo.findAllOrdersJoinUsersWithAllFilters(
 				orderItem,
@@ -130,6 +141,8 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 				dateTo,
 				pageable
 				);
+		List<OrderBaseResponseDTO> responsePage = orderRepo.findAllOrdersById(responeIds);
+		responsePage.stream().forEach(order -> System.out.println("order -> " + order));
 		
 //		result = orderRepo.testFindAllOrdersJoinUsersWithAllFilters(
 //				orderItem,
@@ -196,7 +209,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 				);
 		
 		
-		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(result.getContent().stream()
+		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(responsePage.stream()
 																		.map(this::convertToOrderResponseDTO)
 																		.collect(Collectors.toList()));
 		System.out.println(res.size());
