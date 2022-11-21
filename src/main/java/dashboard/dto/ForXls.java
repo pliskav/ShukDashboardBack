@@ -24,6 +24,6 @@ public class ForXls {
 	String storeName;
 	String orderDate;
 	String total;
-	HashMap<String,Integer> itemData;
+	HashMap<String,String> itemData;
 
 }

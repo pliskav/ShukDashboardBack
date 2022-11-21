@@ -547,18 +547,18 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 		
 		PageDTO orders =  findOrdersByFilters(null, null, null, null, null, null, null, null, 0, 500);
 		
-		HashMap<String,Integer> map = new HashMap();
+		HashMap<String,String> map = new HashMap();
 		for(int i=0; i<orders.getOrderPage().getOrders().size();i++) {
 			for(ItemData names: orders.getOrderPage().getOrders().get(i).getOrderItemsDtos()) {
 				if(!map.containsKey(names.getName())) {
-					map.put(names.getName(), 0);
+					map.put(names.getName(), "");
 				}
 			}
 		}
 		
 		
 		for(int i=0; i<orders.getOrderPage().getOrders().size();i++) {
-			HashMap<String,Integer> map1 = new HashMap();
+			HashMap<String,String> map1 = new HashMap();
 			map1.putAll(map);
 			
 			
@@ -579,7 +579,7 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 			
 			for(int y=0;y<ds.getOrderItemsDtos().size();y++) {
 				
-					map1.put(ds.getOrderItemsDtos().get(y).getName(),ds.getOrderItemsDtos().get(y).getQuantity());
+					map1.put(ds.getOrderItemsDtos().get(y).getName(),ds.getOrderItemsDtos().get(y).getQuantity()>0?String.valueOf(ds.getOrderItemsDtos().get(y).getQuantity()):"");
 				
 				/*
 				 * ItemDataDto itemDataDto = new ItemDataDto();
