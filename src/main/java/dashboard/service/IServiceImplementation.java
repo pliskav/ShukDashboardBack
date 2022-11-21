@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import dashboard.configuration.Params;
@@ -27,15 +28,17 @@ import dashboard.dao.AddonCategories;
 import dashboard.dao.AddonCategoryItem;
 import dashboard.dao.Addons;
 import dashboard.dao.Item;
+import dashboard.dao.ItemData;
 import dashboard.dao.Language;
 import dashboard.dao.OrderItem;
 import dashboard.dao.OrderItemAddons;
 import dashboard.dao.Orders;
 import dashboard.dao.Store;
 import dashboard.dao.Users;
+import dashboard.dto.ForXls;
 import dashboard.dto.ItemBriefDTO;
 import dashboard.dto.ItemDTO;
-import dashboard.dto.ItemData;
+import dashboard.dto.ItemDataDto;
 import dashboard.dto.OrderBaseResponseDTO;
 import dashboard.dto.OrderDTO;
 import dashboard.dto.OrderPageDTO;
@@ -130,19 +133,14 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 				pageable);
 		responeIds.stream().forEach(id -> System.out.println("orderid - " + id));
 		
-		Page<OrderBaseResponseDTO> result = orderRepo.findAllOrdersJoinUsersWithAllFilters(
-				orderItem,
-				userEmail, 
-				userPhone, 
-				userName, 
-				orderDate,
-				storeId==null ? null : storeId.toString(), 
-				dateFrom,
-				dateTo,
-				pageable
-				);
-		List<OrderBaseResponseDTO> responsePage = orderRepo.findAllOrdersById(responeIds);
-		responsePage.stream().forEach(order -> System.out.println("order -> " + order));
+		
+		  Page<OrderBaseResponseDTO> result =
+		  orderRepo.findAllOrdersJoinUsersWithAllFilters( orderItem, userEmail,
+		  userPhone, userName, orderDate, storeId==null ? null : storeId.toString(),
+		  dateFrom, dateTo, pageable ); List<OrderBaseResponseDTO> responsePage =
+		  orderRepo.findAllOrdersById(responeIds); responsePage.stream().forEach(order
+		  -> System.out.println("order -> " + order));
+		 
 		
 //		result = orderRepo.testFindAllOrdersJoinUsersWithAllFilters(
 //				orderItem,
@@ -197,7 +195,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 //			
 //		}
 		
-		Long totalCount = orderRepo.findCountofAllOrdersJoinUsersWithAllFilters(
+		int totalCount = orderRepo.findCountofAllOrdersJoinUsersWithAllFilters(
 				orderItem,
 				userEmail, 
 				userPhone, 
@@ -209,9 +207,10 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 				);
 		
 		
-		List<OrderResponseDTO> res = new ArrayList<OrderResponseDTO>(responsePage.stream()
-																		.map(this::convertToOrderResponseDTO)
-																		.collect(Collectors.toList()));
+		List<OrderResponseDTO> res = 
+										  new ArrayList<OrderResponseDTO>(responsePage.stream()
+										  .map(this::convertToOrderResponseDTO) .collect(Collectors.toList()));
+										 
 		System.out.println(res.size());
 		
 		Set<Integer> itemIdSet = res
@@ -271,6 +270,9 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 						.orders(res)
 						.items(listItems)
 						.build())
+				.current_page(0)
+				.items_on_page(res.size())
+				.total_count(results.size())
 				.build();
 	}
 
@@ -293,7 +295,7 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 		}
 		System.out.println(order.getId());
 		
-		UserOrderDTO user = new UserOrderDTO(item.getUser_id(), item.getUserName(), item.getEmail(), item.getPhone(), item.getDefault_address_id(), 
+		UserOrderDTO user = new UserOrderDTO(item.getUser_id(), item.getUserName(), item.getEmail(), item.getPhone(),item.getSecond_phone(), item.getDefault_address_id(), 
 				item.getDelivery_pin(), item.getDelivery_guy_detail_id(), item.getAvatar(), item.getUser_is_active(), item.getTax_number());
 		
 		String goodString = item.getGoods();
@@ -536,6 +538,80 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 	public List<Store> getAllStoreById(List<Integer> ids) {
 		List<Store> stores = storeRepository.findAllById(ids);
 		return stores;
+	}
+	@Override
+	public List<ForXls> getOrderForXls(String date) {
+		
+		List<ForXls> toSheet = new ArrayList();
+		
+		PageDTO orders =  findOrdersByFilters(null, null, null, null, null, null, null, null, 0, 500);
+		
+		
+		for(int i=0; i<orders.getOrderPage().getOrders().size();i++) {
+			List<ItemDataDto> itemData = new ArrayList();
+			OrderResponseDTO ds = orders.getOrderPage().getOrders().get(i);
+			ForXls forXls = new ForXls();
+			forXls.setUniqueOrderId(ds.getOrder().getUnique_order_id());
+			forXls.setOrderStatusId(ds.getOrder().getOrderstatus_id());
+			forXls.setUserId(ds.getUser().getId());
+			forXls.setUserName(ds.getUser().getName());
+			forXls.setUserPhone(ds.getUser().getPhone());
+			forXls.setUserSecondPhone(ds.getUser().getSecondPhone());
+			forXls.setAddress(ds.getOrder().getAddress());
+			forXls.setStoreName(ds.getOrder().getStoreName());
+			forXls.setOrderDate(ds.getOrder().getOrderDate());
+			forXls.setTotal(ds.getOrder().getTotal());
+			
+			for(int y=0;y<ds.getOrderItemsDtos().size();y++) {
+				ItemDataDto itemDataDto = new ItemDataDto();
+				itemDataDto.setName(ds.getOrderItemsDtos().get(y).getName());
+				itemDataDto.setPrice(ds.getOrderItemsDtos().get(y).getPrice());
+				itemDataDto.setQuantity(ds.getOrderItemsDtos().get(y).getQuantity());
+				itemData.add(itemDataDto);
+			}
+			forXls.setItemData(itemData);
+			toSheet.add(forXls);
+		}
+		
+		/*
+		 * ForXls forXls = new ForXls(); ArrayList<JsonObject>arr = new
+		 * ArrayList<JsonObject>(); List<Orders> orders = orderRepo.findAll();
+		 * 
+		 * for(int i=0;i<orders.size();i++) {
+		 * System.out.println("ORDER ID ----------"+orders.get(i).getId()); String
+		 * orderString = new Gson().toJson(orders.get(i)); JsonObject order = new
+		 * Gson().fromJson(orderString, JsonObject.class);//new
+		 * JsonObject().getAsJsonObject(orderString); int userId =
+		 * orders.get(i).getUser_id(); Users user = userRepo.findById(userId);
+		 * 
+		 * int storeId = Integer.parseInt(orders.get(i).getRestaurant_id());
+		 * Optional<Store> store = storeRepository.findById(storeId); List<OrderItem>
+		 * orderItem = orderItemRepository.findAllByOrderId(orders.get(i).getId());
+		 * 
+		 * order.addProperty("storeName", store.get().getStore_name());
+		 * order.addProperty("userName", user.getUserName()); for(int y = 0;
+		 * y<orderItem.size();y++) {
+		 * System.out.println("ORDER ITEM ID ----------"+orderItem.get(y).getId());
+		 * OrderItemAddons addons = null; if(orderItem.get(y).getPrice()==0){
+		 * OrderItemAddons orderItemAddons =
+		 * orderItemAddonsRepository.findByOrderItemId(orderItem.get(y).getId());
+		 * System.out.println("ORDER ITEM ADDON ID ----------"+orderItemAddons.getId());
+		 * if(orderItemAddons!=null) { addons = orderItemAddons; }
+		 * order.addProperty(orderItem.get(y).getItemName(), addons.getAddonName());
+		 * }else { order.addProperty(orderItem.get(y).getItemName(),
+		 * orderItem.get(y).getQuantity()); }
+		 * 
+		 * 
+		 * }
+		 * 
+		 * arr.add(order); }
+		 */
+		
+		
+		
+		
+		
+		return toSheet;
 	}
 
 

@@ -1,7 +1,11 @@
 package dashboard.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonObject;
+
+import dashboard.dto.ForXls;
 import dashboard.dto.OrderBaseResponseDTO;
 import dashboard.dto.OrderDTO;
 import dashboard.dto.OrderResponseDTO;
@@ -27,5 +31,10 @@ public interface IOrders {
 	public PageDTO getAllOrdersByUserId(int userId);
 	
 	public String createPaymentMeshulam(String orderId);
+
+
+	public List<ForXls> getOrderForXls(String date);
+	
+	 
 
 }

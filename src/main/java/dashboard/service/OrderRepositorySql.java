@@ -36,7 +36,7 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 			+ "and :itemName is null or lower(items.itemName) in (:itemName) "
 			+ "order by o.created_at desc",
 			nativeQuery = false)
-	Long findCountofAllOrdersJoinUsersWithAllFilters(
+	int findCountofAllOrdersJoinUsersWithAllFilters(
 														@Param(value = "itemName") List<String> itemName,
 														@Param(value = "email") String email,
 														@Param("phone") String phone,
@@ -51,7 +51,8 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.uniqueOrderId, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.location, o.tax, "
 			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
 			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.created_at, o.is_scheduled, o.orderDate, o.orderTime, "
-			+ "u.userName, u.phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "
+			+ "u.userName, u.phone, u.second_phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "
+			+"o.restaurant_id, "
 			+ "group_concat(items.itemId, ',', items.quantity, ',', items.price, ',', items.itemName,  ',', items.id, ';') as goods) "
 			 
 			+ "FROM Orders o "
@@ -84,7 +85,7 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 																@Param("dateTo") String to,
 																Pageable pageable);
 	
-	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.uniqueOrderId, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.location, o.tax, "
+	/*@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.uniqueOrderId, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.location, o.tax, "
 			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
 			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.created_at, o.is_scheduled, o.orderDate, o.orderTime, "
 
@@ -123,10 +124,10 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 																@Param("restaurantId") String restaurantId,
 																@Param("dateFrom") String from,
 																@Param("dateTo") String to,
-																Pageable pageable);
+																Pageable pageable);*/
 	
 	
-	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.uniqueOrderId, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.location, o.tax, "
+	/*@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.uniqueOrderId, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.location, o.tax, "
 			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
 			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.created_at, o.is_scheduled, o.orderDate, o.orderTime, "
 
@@ -155,9 +156,9 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 																@Param("restaurantId") String restaurantId,
 																@Param("dateFrom") String from,
 																@Param("dateTo") String to,
-																Pageable pageable);
+																Pageable pageable);*/
 	
-	@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.uniqueOrderId, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.location, o.tax, "
+	/*@Query(value = "SELECT new dashboard.dto.OrderBaseResponseDTO(o.id, o.uniqueOrderId, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.location, o.tax, "
 			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
 			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.created_at, o.is_scheduled, o.orderDate, o.orderTime, "
 
@@ -172,7 +173,7 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 			+ "group by o.id "
 			+ "order by o.created_at desc",
 			nativeQuery = false)
-	Page<OrderBaseResponseDTO> findAllOrdersJoinUsers(Pageable pageable);
+	Page<OrderBaseResponseDTO> findAllOrdersJoinUsers(Pageable pageable);*/
 	
 	
 	
@@ -186,7 +187,8 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
 			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.created_at, o.is_scheduled, o.orderDate, o.orderTime, "
 
-			+ "u.userName, u.phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "
+			+ "u.userName, u.phone, u.second_phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "
+			+"o.restaurant_id, "
 
 			+ "group_concat(items.itemId, ',', items.quantity, ',', items.price, ',', items.itemName,  ',', items.id, ';') as goods) "
 			 
@@ -251,7 +253,8 @@ public interface OrderRepositorySql extends CrudRepository<Orders, Integer> {
 			+ "new dashboard.dto.OrderBaseResponseDTO(o.id, o.uniqueOrderId, o.orderstatus_id, o.user_id, o.coupon_name, o.address, o.location, o.tax, "
 			+ "o.restaurant_charge, o.delivery_charge, o.total, o.payment_mode, o.order_comment, o.restaurant_id, o.transaction_id, o.delivery_type, o.payable, "
 			+ "o.wallet_amount, o.tip_amount, o.tax_amount, o.coupon_amount, o.sub_total, o.created_at, o.is_scheduled, o.orderDate, o.orderTime, "
-			+ "u.userName, u.phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "
+			+ "u.userName, u.phone, u.second_phone, u.email, u.avatar, u.default_address_id, u.delivery_pin, u.delivery_guy_detail_id, u.userIs_active, u.tax_number, "
+			+"o.restaurant_id, "
 			+ "group_concat(items.itemId, ',', items.quantity, ',', items.price, ',', items.itemName,  ',', items.id, ';') as goods) "
 			 
 			+ "FROM Orders o "

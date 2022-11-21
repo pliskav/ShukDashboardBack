@@ -2,6 +2,8 @@ package dashboard.dto;
 
 import java.util.List;
 
+import dashboard.dao.ItemData;
+
 public class OrderResponseDTO {
 	OrderDTO order;
 	UserOrderDTO user;

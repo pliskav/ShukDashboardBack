@@ -1,4 +1,4 @@
-package dashboard.dto;
+package dashboard.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

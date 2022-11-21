@@ -10,44 +10,44 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderBaseResponseDTO {
-	int id;
-	String unique_order_id;
-	Integer orderstatus_id;
-	int user_id;
-	String coupon_name;
-	String address;
-	String location;
-	String tax;
-	String restaurant_charge;
-	String delivery_charge;
-	String total;
-	String payment_mode;
-	String order_comment;
-	String restaurant_id;
-	String transaction_id;
-	String delivery_type;
-	String payable;
-	String wallet_amount;
-	String tip_amount;
-	String tax_amount;
-	String coupon_amount;
-	String sub_total;
-	String createdAt;
-	String is_scheduled;
-	String orderDate;
-	String orderTime;
-		String userName;
-	String phone;
-//	String second_phone;
-	String email;
-	String avatar;
-	String default_address_id;
-	String delivery_pin;
-	String delivery_guy_detail_id;
-	String user_is_active;
-	String tax_number;
-	String store_name;
-	String goods;
+	int id;//o.id
+	String unique_order_id;//o.uniqueOrderId
+	int orderstatus_id;//o.orderstatus_id
+	int user_id;//o.user_id
+	String coupon_name;//o.coupon_name
+	String address;// o.address
+	String location;//o.location
+	String tax;//o.tax
+	String restaurant_charge;//o.restaurant_charge
+	String delivery_charge;//o.delivery_charge
+	String total;//o.total
+	String payment_mode;//o.payment_mode
+	String order_comment;//o.order_comment
+	String restaurant_id;//o.restaurant_id
+	String transaction_id;//o.transaction_id
+	String delivery_type;//o.delivery_type
+	String payable;//o.payable
+	String wallet_amount;//o.wallet_amount
+	String tip_amount;//o.tip_amount
+	String tax_amount;//o.tax_amount
+	String coupon_amount;//o.coupon_amount
+	String sub_total;//o.sub_total
+	String createdAt;//o.created_at
+	String is_scheduled;//o.is_scheduled
+	String orderDate;//o.orderDate
+	String orderTime;// o.orderTime
+		String userName;//u.userName
+	String phone;//u.phone
+	String second_phone;
+	String email;//u.email
+	String avatar;// u.avatar
+	String default_address_id;//u.default_address_id
+	String delivery_pin;//u.delivery_pin
+	String delivery_guy_detail_id;//u.delivery_guy_detail_id
+	String user_is_active;// u.userIs_active
+	String tax_number;// u.tax_number
+	String store_name;//
+	String goods;//
 	
 	
 

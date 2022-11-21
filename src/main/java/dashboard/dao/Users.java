@@ -37,7 +37,7 @@ public class Users {
 	@Column(name = "is_active")
 	String userIs_active; 
 	String tax_number;
-	int default_language;
+	int default_language = 1;
 	
 	
 	
