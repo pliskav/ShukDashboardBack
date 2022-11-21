@@ -132,15 +132,15 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 				dateFrom,
 				dateTo,
 				pageable);
-		//responeIds.stream().forEach(id -> System.out.println("orderid - " + id));
+	//	responeIds.stream().forEach(id -> System.out.println("orderid - " + id));
 		
 		
 		  Page<OrderBaseResponseDTO> result =
 		  orderRepo.findAllOrdersJoinUsersWithAllFilters( orderItem, userEmail,
 		  userPhone, userName, orderDate, storeId==null ? null : storeId.toString(),
 		  dateFrom, dateTo, pageable ); List<OrderBaseResponseDTO> responsePage =
-		  orderRepo.findAllOrdersById(responeIds); 
-		  //responsePage.stream().forEach(order  -> System.out.println("order -> " + order));
+		  orderRepo.findAllOrdersById(responeIds);
+		  //responsePage.stream().forEach(order		  -> System.out.println("order -> " + order));
 		 
 		
 //		result = orderRepo.testFindAllOrdersJoinUsersWithAllFilters(
@@ -294,7 +294,7 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//System.out.println(order.getId());
+	//	System.out.println(order.getId());
 		
 		UserOrderDTO user = new UserOrderDTO(item.getUser_id(), item.getUserName(), item.getEmail(), item.getPhone(),item.getSecond_phone(), item.getDefault_address_id(), 
 				item.getDelivery_pin(), item.getDelivery_guy_detail_id(), item.getAvatar(), item.getUser_is_active(), item.getTax_number());
@@ -578,7 +578,7 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 		
 			
 			for(int y=0;y<ds.getOrderItemsDtos().size();y++) {
-				//System.out.println(ds.getOrderItemsDtos().get(y).getName()+"->"+ds.getOrderItemsDtos().get(y).getQuantity());
+				
 					map1.put(ds.getOrderItemsDtos().get(y).getName(),ds.getOrderItemsDtos().get(y).getQuantity());
 				
 				/*
