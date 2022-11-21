@@ -1,5 +1,6 @@
 package dashboard.dto;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -23,6 +24,6 @@ public class ForXls {
 	String storeName;
 	String orderDate;
 	String total;
-	List<ItemDataDto> itemData;
+	HashMap<String,Integer> itemData;
 
 }

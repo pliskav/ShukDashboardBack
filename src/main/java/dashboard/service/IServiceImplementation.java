@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
@@ -119,7 +120,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 //		if(orderItem!=null) {
 //			orderItem = "%".concat(orderItem).concat("%");
 //		}
-		if(current_page!=null) {System.out.println("current page + " + current_page);}
+	//	if(current_page!=null) {System.out.println("current page + " + current_page);}
 		Pageable pageable = PageRequest.of(current_page, items_on_page);
 		List<Integer>responeIds = orderRepo.findAllOrderIdsWithAllFilters(
 				orderItem,
@@ -131,15 +132,15 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 				dateFrom,
 				dateTo,
 				pageable);
-		responeIds.stream().forEach(id -> System.out.println("orderid - " + id));
+		//responeIds.stream().forEach(id -> System.out.println("orderid - " + id));
 		
 		
 		  Page<OrderBaseResponseDTO> result =
 		  orderRepo.findAllOrdersJoinUsersWithAllFilters( orderItem, userEmail,
 		  userPhone, userName, orderDate, storeId==null ? null : storeId.toString(),
 		  dateFrom, dateTo, pageable ); List<OrderBaseResponseDTO> responsePage =
-		  orderRepo.findAllOrdersById(responeIds); responsePage.stream().forEach(order
-		  -> System.out.println("order -> " + order));
+		  orderRepo.findAllOrdersById(responeIds); 
+		  //responsePage.stream().forEach(order  -> System.out.println("order -> " + order));
 		 
 		
 //		result = orderRepo.testFindAllOrdersJoinUsersWithAllFilters(
@@ -211,7 +212,7 @@ public class IServiceImplementation implements IService, IOrders, IOrderItems,IS
 										  new ArrayList<OrderResponseDTO>(responsePage.stream()
 										  .map(this::convertToOrderResponseDTO) .collect(Collectors.toList()));
 										 
-		System.out.println(res.size());
+		//System.out.println(res.size());
 		
 		Set<Integer> itemIdSet = res
 									.stream()
@@ -293,7 +294,7 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(order.getId());
+		//System.out.println(order.getId());
 		
 		UserOrderDTO user = new UserOrderDTO(item.getUser_id(), item.getUserName(), item.getEmail(), item.getPhone(),item.getSecond_phone(), item.getDefault_address_id(), 
 				item.getDelivery_pin(), item.getDelivery_guy_detail_id(), item.getAvatar(), item.getUser_is_active(), item.getTax_number());
@@ -546,8 +547,21 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 		
 		PageDTO orders =  findOrdersByFilters(null, null, null, null, null, null, null, null, 0, 500);
 		
+		HashMap<String,Integer> map = new HashMap();
+		for(int i=0; i<orders.getOrderPage().getOrders().size();i++) {
+			for(ItemData names: orders.getOrderPage().getOrders().get(i).getOrderItemsDtos()) {
+				if(!map.containsKey(names.getName())) {
+					map.put(names.getName(), 0);
+				}
+			}
+		}
+		
 		
 		for(int i=0; i<orders.getOrderPage().getOrders().size();i++) {
+			HashMap<String,Integer> map1 = new HashMap();
+			map1.putAll(map);
+			
+			
 			List<ItemDataDto> itemData = new ArrayList();
 			OrderResponseDTO ds = orders.getOrderPage().getOrders().get(i);
 			ForXls forXls = new ForXls();
@@ -561,15 +575,22 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 			forXls.setStoreName(ds.getOrder().getStoreName());
 			forXls.setOrderDate(ds.getOrder().getOrderDate());
 			forXls.setTotal(ds.getOrder().getTotal());
+		
 			
 			for(int y=0;y<ds.getOrderItemsDtos().size();y++) {
-				ItemDataDto itemDataDto = new ItemDataDto();
-				itemDataDto.setName(ds.getOrderItemsDtos().get(y).getName());
-				itemDataDto.setPrice(ds.getOrderItemsDtos().get(y).getPrice());
-				itemDataDto.setQuantity(ds.getOrderItemsDtos().get(y).getQuantity());
-				itemData.add(itemDataDto);
+				//System.out.println(ds.getOrderItemsDtos().get(y).getName()+"->"+ds.getOrderItemsDtos().get(y).getQuantity());
+					map1.put(ds.getOrderItemsDtos().get(y).getName(),ds.getOrderItemsDtos().get(y).getQuantity());
+				
+				/*
+				 * ItemDataDto itemDataDto = new ItemDataDto();
+				 * itemDataDto.setName(ds.getOrderItemsDtos().get(y).getName());
+				 * itemDataDto.setPrice(ds.getOrderItemsDtos().get(y).getPrice());
+				 * itemDataDto.setQuantity(ds.getOrderItemsDtos().get(y).getQuantity());
+				 */
+				//itemData.add(itemDataDto);
 			}
-			forXls.setItemData(itemData);
+			
+			forXls.setItemData(map1);
 			toSheet.add(forXls);
 		}
 		
