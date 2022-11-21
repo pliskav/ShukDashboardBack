@@ -13,17 +13,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ForXls {
-	String id;
-	String uniqueOrderId;
-	int orderStatusId;
-	int userId;
-	String userName;
-	String UserPhone;
-	String userSecondPhone;
-	String address;
-	String storeName;
-	String orderDate;
-	String total;
-	HashMap<String,String> itemData;
+	
+	String i_uniqueOrderId;
+	int j_orderStatusId;
+	int k_userId;
+	String b_userName;
+	String c_userPhone;
+	String d_userSecondPhone;
+	String e_address;
+	String h_storeName;
+	String f_orderDate;
+	String a_total;
+	HashMap<String,String> g_itemData;
 
 }

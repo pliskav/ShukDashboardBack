@@ -31,6 +31,7 @@ import dashboard.dao.Addons;
 import dashboard.dao.Item;
 import dashboard.dao.ItemData;
 import dashboard.dao.Language;
+import dashboard.dao.OrderDate;
 import dashboard.dao.OrderItem;
 import dashboard.dao.OrderItemAddons;
 import dashboard.dao.Orders;
@@ -565,16 +566,17 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 			List<ItemDataDto> itemData = new ArrayList();
 			OrderResponseDTO ds = orders.getOrderPage().getOrders().get(i);
 			ForXls forXls = new ForXls();
-			forXls.setUniqueOrderId(ds.getOrder().getUnique_order_id());
-			forXls.setOrderStatusId(ds.getOrder().getOrderstatus_id());
-			forXls.setUserId(ds.getUser().getId());
-			forXls.setUserName(ds.getUser().getName());
-			forXls.setUserPhone(ds.getUser().getPhone());
-			forXls.setUserSecondPhone(ds.getUser().getSecondPhone());
-			forXls.setAddress(ds.getOrder().getAddress());
-			forXls.setStoreName(ds.getOrder().getStoreName());
-			forXls.setOrderDate(ds.getOrder().getOrderDate());
-			forXls.setTotal(ds.getOrder().getTotal());
+			forXls.setI_uniqueOrderId(ds.getOrder().getUnique_order_id());
+			forXls.setJ_orderStatusId(ds.getOrder().getOrderstatus_id());
+			forXls.setK_userId(ds.getUser().getId());
+			forXls.setB_userName(ds.getUser().getName());
+			forXls.setC_userPhone(ds.getUser().getPhone());
+			forXls.setD_userSecondPhone(ds.getUser().getSecondPhone());
+			forXls.setE_address(ds.getOrder().getAddress());
+			forXls.setH_storeName(ds.getOrder().getStoreName());
+			OrderDate js = new Gson().fromJson(ds.getOrder().getOrderDate(),OrderDate.class);
+			forXls.setF_orderDate(js.getDate());
+			forXls.setA_total(ds.getOrder().getTotal());
 		
 			
 			for(int y=0;y<ds.getOrderItemsDtos().size();y++) {
@@ -590,7 +592,7 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
 				//itemData.add(itemDataDto);
 			}
 			
-			forXls.setItemData(map1);
+			forXls.setG_itemData(map1);
 			toSheet.add(forXls);
 		}
 		
