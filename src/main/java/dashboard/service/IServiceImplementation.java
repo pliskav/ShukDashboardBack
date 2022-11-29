@@ -506,7 +506,8 @@ List<Item> listItems = itemRepository.findAllById(itemIdSet);
     	}
 		
 		if(text!=null) {
-					WhatsappMessage.getInstance().sendWhatsappMessage(user.getPhone(),text);
+			System.out.println(text);
+					WhatsappMessage.getInstance().sendSms("972524083393",text);//sendWhatsappMessage(user.getPhone(),text);
 		}
 		return true;
 	}
